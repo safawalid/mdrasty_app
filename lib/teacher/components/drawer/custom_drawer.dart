@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mdrasty_app/teacher/components/drawer/bottom_user_info.dart';
 import 'package:mdrasty_app/teacher/components/drawer/header.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/diary/diary.dart';
+import 'package:mdrasty_app/teacher/tabbar/classtab/grads/grads.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/grads/subjects.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:page_transition/page_transition.dart';
@@ -120,7 +121,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: Dashboard(),
+                        child: StudentMarksPage(),
                       ));
                     },
                     isTabSelected: _currentTabIndex == 1,

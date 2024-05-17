@@ -6,22 +6,9 @@ import 'dart:convert';
 import 'package:mdrasty_app/constant/appbar.dart';
 
 
-void main() {
-  runApp(StudentMarksApp());
-}
 
-class StudentMarksApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Student Marks',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: StudentMarksPage(),
-    );
-  }
-}
+
+
 
 class StudentMarksPage extends StatefulWidget {
   @override

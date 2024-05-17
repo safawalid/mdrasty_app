@@ -1,11 +1,15 @@
+// ignore: file_names
+// ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
+import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
 import 'package:mdrasty_app/teacher/tabbar/test.dart';
+
 import 'package:page_transition/page_transition.dart';
 
 class descution extends StatefulWidget {
@@ -16,10 +20,28 @@ class descution extends StatefulWidget {
 class _descutionState extends State<descution> {
   List<Map<String, dynamic>> notifications = [];
   String _searchText = '';
+  final TextEditingController _searchController = TextEditingController();
+  List<String> _filteredNames = [];
+  bool _isBackPressed = false;
+
+ void _filterNames(String query) {
+  setState(() {
+    if (query.isEmpty) {
+      _filteredNames = notifications.map((notification) => notification['title'] as String).toList();
+    } else {
+      _filteredNames = notifications
+          .where((notification) => notification['title'].contains(query))
+          .map((notification) => notification['title'] as String)
+          .toList();
+    }
+  });
+}
+
 
   void _addNotification(Map<String, dynamic> notification) {
     setState(() {
       notifications.add(notification);
+      _filteredNames =  notifications.map((notification) => notification['title'] as String).toList();
     });
   }
 
@@ -35,7 +57,8 @@ class _descutionState extends State<descution> {
     });
   }
 
-  void _showAddNotificationDialog({Map<String, dynamic>? notification, int? index}) {
+  void _showAddNotificationDialog(
+      {Map<String, dynamic>? notification, int? index}) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -60,161 +83,153 @@ class _descutionState extends State<descution> {
   @override
   Widget build(BuildContext context) {
     bool isPressed;
-
-    // Filter notifications based on search text
-    List<Map<String, dynamic>> filteredNotifications = notifications
-        .where((notification) =>
-            notification['title']
-                .toLowerCase()
-                .contains(_searchText.toLowerCase()))
-        .toList();
-
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('مناقشه'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(
-                  context: context,
-                  delegate: NotificationSearchDelegate(notifications),
-                );
-              },
+        appBar: CustomAppBar(title: 'مناقشه'),
+        endDrawer: const CustomDrawer(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Column(
+              children: [
+                SearchBar(
+                  controller: _searchController,
+                  onChanged: _filterNames,
+                  noResults: _filteredNames.isEmpty &&
+                      _searchController.text.isNotEmpty,
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+  itemCount: _filteredNames.length,
+  itemBuilder: (context, index) {
+    var notificationTitle = _filteredNames[index];
+    var notification = notifications.firstWhere((notification) => notification['title'] == notificationTitle);
+
+    return Column(
+      children: [
+        SizedBox(
+          height: 15,
+        ),
+        Padding(
+          padding: EdgeInsets.all(10),
+          child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 4, // Remove card elevation
+                          color: Colors.white, // Transparent card background
+                          child: Column(
+                            children: [
+                              ListTile(
+                                // Top left corner
+                                leading: PopupMenuButton<String>(
+                                  onSelected: (value) {
+                                    if (value == 'edit') {
+                                      _showAddNotificationDialog(
+                                        notification: notification,
+                                        index: index,
+                                      );
+                                    } else if (value == 'delete') {
+                                      _deleteNotification(index);
+                                    }
+                                  },
+                                  itemBuilder: (context) => [
+                                    PopupMenuItem<String>(
+                                      value: 'edit',
+                                      child: Text('Edit'),
+                                    ),
+                                    PopupMenuItem<String>(
+                                      value: 'delete',
+                                      child: Text('Delete'),
+                                    ),
+                                  ],
+                                ), // Three dots on the left side
+
+                                // Timestamp on the top left corner
+                              ),
+                              // Title on the top  corner
+                              const SizedBox(
+                                height: 10,
+                              ),
+
+                              Column(
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      notification['title'],
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05, // Adjust font size
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(30, 8, 30, 8),
+                                    child: Divider(
+                                      color: Colors.grey.shade700,
+                                      height: 5,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(
+                                    notification['content'],
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.right,
+                                  ),
+                                  SizedBox(
+                                    height: 40,
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(
+                                height: 10,
+                              ),
+
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 20),
+                                child: CustomGradientButton(
+                                  buttonText: 'عرض الحلول',
+                                  onPressed: () {
+                                    Navigator.of(context).push(PageTransition(
+                                      type: PageTransitionType.leftToRight,
+                                      duration: Duration(milliseconds: 600),
+                                      reverseDuration:
+                                          Duration(microseconds: 600),
+                                      child: ViewHomeworkTab(),
+                                    ));
+                                  },
+                                  hasHomework: true,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+
+        ),
+      ],
+    );
+  },
+)
             ),
           ],
         ),
-        endDrawer: const CustomDrawer(),
-        body: filteredNotifications.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/no_results.png'), // Update with your no results image path
-                    SizedBox(height: 20),
-                    Text(
-                      'Sorry, no results found.',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
-                ),
-              )
-            : ListView.builder(
-                itemCount: filteredNotifications.length,
-                itemBuilder: (context, index) {
-                  var notification = filteredNotifications[index];
-                  bool isPressed = false;
-
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 15,
-                      ),
-                      ListTile(
-                        leading: PopupMenuButton<String>(
-                          onSelected: (value) {
-                            if (value == 'edit') {
-                              _showAddNotificationDialog(
-                                notification: notification,
-                                index: index,
-                              );
-                            } else if (value == 'delete') {
-                              _deleteNotification(index);
-                            }
-                          },
-                          itemBuilder: (context) => [
-                            PopupMenuItem<String>(
-                              value: 'edit',
-                              child: Text('Edit'),
-                            ),
-                            PopupMenuItem<String>(
-                              value: 'delete',
-                              child: Text('Delete'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 1,
-                        color: Colors.transparent,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Column(
-                              children: [
-                                Center(
-                                  child: Text(
-                                    notification['title'],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: MediaQuery.of(context)
-                                              .size
-                                              .width *
-                                          0.05,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(30, 8, 30, 8),
-                                  child: Divider(
-                                    color: Colors.grey.shade700,
-                                    height: 5,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  notification['content'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.right,
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20),
-                              child: CustomGradientButton(
-                                buttonText: 'عرض الحلول',
-                                onPressed: () {
-                                  Navigator.of(context).push(PageTransition(
-                                    type: PageTransitionType.leftToRight,
-                                    duration: Duration(milliseconds: 600),
-                                    reverseDuration:
-                                        Duration(milliseconds: 600),
-                                    child: ViewHomeworkTab(),
-                                  ));
-                                },
-                                hasHomework: true,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddNotificationDialog(),
-          tooltip: 'Add Notification',
+          tooltip: 'اضف نقاش',
           child: Icon(Icons.add),
           backgroundColor: Colors.blue.shade900,
         ),
@@ -325,7 +340,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              widget.notification == null ? 'واجب جديد' : 'تعديل الواجب',
+              widget.notification == null ? 'اشعار جديد' : 'تعديل الاشعار',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 28,
@@ -374,7 +389,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter a title';
                           }
-                          return null;
+                          return null; // Input is valid
                         },
                       ),
                     ),
@@ -409,7 +424,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter content';
                             }
-                            return null;
+                            return null; // Input is valid
                           },
                         )),
                     ListTile(
@@ -428,7 +443,8 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          hasHomework: false,
+                          // hasHomework:
+                          //     false, // Set hasHomework to false for the Cancel button
                         ),
                         CustomGradientButton(
                           buttonText:
@@ -438,7 +454,8 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                               _submit();
                             }
                           },
-                          hasHomework: true,
+                          hasHomework:
+                              true, // Assuming the Edit/Submit button has homework
                         ),
                       ],
                     )
@@ -450,76 +467,5 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
         ],
       ),
     );
-  }
-}
-
-class NotificationSearchDelegate extends SearchDelegate {
-  final List<Map<String, dynamic>> notifications;
-
-  NotificationSearchDelegate(this.notifications);
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = '';
-        },
-      ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<Map<String, dynamic>> filteredNotifications = notifications
-        .where((notification) =>
-            notification['title'].toLowerCase().contains(query.toLowerCase()))
-        .toList();
-
-    if (filteredNotifications.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/no_results.png'), // Update with your no results image path
-            SizedBox(height: 20),
-            Text(
-              'Sorry, no results found.',
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return ListView.builder(
-      itemCount: filteredNotifications.length,
-      itemBuilder: (context, index) {
-        var notification = filteredNotifications[index];
-        return ListTile(
-          title: Text(notification['title']),
-          subtitle: Text(notification['content']),
-          onTap: () {
-            close(context, notification);
-          },
-        );
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return buildResults(context);
   }
 }

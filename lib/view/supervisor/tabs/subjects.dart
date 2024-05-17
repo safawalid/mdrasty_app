@@ -8,9 +8,18 @@ import 'package:mdrasty_app/teacher/components/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/grads/grads.dart';
 import 'package:page_transition/page_transition.dart';
 
+void main() {
+  runApp(MyApp());
+}
 
-
-
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Dashboard(),
+    );
+  }
+}
 
 class Dashboard extends StatelessWidget {
   @override
