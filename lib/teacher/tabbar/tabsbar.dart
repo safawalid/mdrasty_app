@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mdrasty_app/constant/class.dart';
+import 'package:mdrasty_app/teacher/tabbar/mnotification/mnotification.dart';
+import 'package:mdrasty_app/view/supervisor/descution.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:mdrasty_app/teacher/tabbar/profile/profile.dart';
 import 'package:mdrasty_app/teacher/tabbar/schadule/schadule.dart';
 
-import '../wedgits/class.dart';
 
 class tabsbutton extends StatefulWidget {
   @override
@@ -42,10 +44,12 @@ class _tabsbuttonState extends State<tabsbutton> {
                 ProfilePage(),
                 WeeklySchedule(),
                 teacherclass(),
+                descution(),
+
                 // Page 2 content
                 // TeacherProfile(),
                 // Profile content
-                teacherclass(),
+                ViewNotification(),
                 NotificationPage(),
               ],
             ),

@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mdrasty_app/login.dart';
 // import 'sign_in.dart';
 
-void main() {
-  runApp(loadingpage());
-}
+
 
 class loadingpage extends StatelessWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/style/fontstyle.dart';
+import 'package:mdrasty_app/constant/fontstyle.dart';
 class buttons extends StatelessWidget {
   const buttons({
     Key? key,

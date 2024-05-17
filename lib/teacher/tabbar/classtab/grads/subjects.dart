@@ -3,9 +3,9 @@
 // import 'package:collasable_drawer/tabbar/classtab/homeworknotification/Homework_tab.dart';
 // import 'package:collasable_drawer/wedgits/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/teacher/components/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/teacher/tabbar/classtab/grads/grads.dart';
-import 'package:mdrasty_app/teacher/wedgits/appbar.dart';
 import 'package:page_transition/page_transition.dart';
 
 void main() {

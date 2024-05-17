@@ -1,10 +1,8 @@
 // import 'package:collasable_drawer/wedgits/appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/teacher/wedgits/appbar.dart';
+import 'package:mdrasty_app/constant/appbar.dart';
 
-void main() {
-  runApp(ScheduleApp());
-}
+
 
 class ScheduleApp extends StatelessWidget {
   @override

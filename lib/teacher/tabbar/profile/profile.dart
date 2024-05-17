@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/style/appbar.dart';
+import 'package:mdrasty_app/constant/appbar.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

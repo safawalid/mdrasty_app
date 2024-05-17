@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/login.dart';
 import 'package:mdrasty_app/sharedprefernces.dart';
-import 'package:mdrasty_app/student/bottomnav.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class shared extends StatefulWidget {

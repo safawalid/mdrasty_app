@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:mdrasty_app/teacher/wedgits/appbar.dart';
+import 'package:mdrasty_app/constant/appbar.dart';
+
 
 void main() {
   runApp(StudentMarksApp());
@@ -42,7 +43,7 @@ class _StudentMarksPageState extends State<StudentMarksPage> {
 
   Future<List<Student>> fetchStudents() async {
     final response = await http.get(Uri.parse(
-        'https://my.api.mockaroo.com/students_marks.json?key=7bf0ba50'));
+        'https://my.api.mockaroo.com/students_marks?key=7bf0ba50'));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);

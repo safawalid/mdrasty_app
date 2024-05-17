@@ -44,6 +44,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:mdrasty_app/constant/fontstyle.dart';
 
 class button extends StatelessWidget {
   const button({Key? key}) : super(key: key);
@@ -67,5 +68,33 @@ class button extends StatelessWidget {
         bottomLeft: Radius.circular(10),
       ),
     ));
+  }
+}
+
+class buttoon extends StatelessWidget {
+  const buttoon({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width / 4,
+        height: MediaQuery.of(context).size.height / 20,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Colors.blue.shade900, Colors.blue],
+          ),
+        ),
+        child: Center(
+          child: Text(' حفظ', style: fontwhite.fonttitle),
+        ),
+      ),
+    );
   }
 }

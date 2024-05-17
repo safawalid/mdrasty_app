@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:mdrasty_app/teacher/wedgits/buttoncolor.dart';
+import 'package:mdrasty_app/constant/buttoncolor.dart';
+
 
 class Homework {
   final String studentName;
@@ -30,16 +31,16 @@ class _ViewHomeworkTabState extends State<ViewHomeworkTab> {
 
   Future<void> fetchHomeworks() async {
     final response =
-        await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+        await http.get(Uri.parse('https://my.api.mockaroo.com/stident_hw?key=7bf0ba50'));
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       setState(() {
         originalHomeworks = jsonData.map((item) {
           return Homework(
-            studentName: item['title'],
+            studentName: item['name'],
             studentAvatarUrl:
-                'https://example.com/avatar.png',
-            date: '2024-04-01',
+              item ['profile_picture'],
+            date: item['date'],
           );
         }).toList();
         filteredHomeworks = List.from(originalHomeworks);
