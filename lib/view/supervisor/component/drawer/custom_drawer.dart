@@ -1,10 +1,9 @@
 
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/teacher/components/drawer/bottom_user_info.dart';
-import 'package:mdrasty_app/teacher/components/drawer/header.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/diary/diary.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/grads/subjects.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
+import 'package:mdrasty_app/view/supervisor/component/drawer/bottom_user_info.dart';
+import 'package:mdrasty_app/view/supervisor/component/drawer/header.dart';
+import 'package:mdrasty_app/view/supervisor/descution.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/subjects.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'custom_list_tile.dart';
@@ -86,7 +85,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: NotificationPage(),
+                        child: descution(),
                       ));
                     },
                     isTabSelected: _selectedTabIndex == 0,
@@ -121,7 +120,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: NotificationPage(),
+                        child: Dashboard()
                       ));
                     },
                     isTabSelected: _currentTabIndex == 5,
@@ -138,7 +137,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: NotificationPage(),
+                        child: Dashboard(),
                       ));
                     },
                     isTabSelected: _currentTabIndex == 6,

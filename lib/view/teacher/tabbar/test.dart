@@ -365,7 +365,7 @@
 
 // import 'package:collasable_drawer/components/drawer/custom_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/teacher/components/drawer/custom_drawer.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
 
 // class loginScreen extends StatelessWidget {
 //   const loginScreen({Key? key}) : super(key: key);

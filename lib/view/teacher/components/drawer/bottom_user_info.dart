@@ -1,9 +1,7 @@
-// import 'package:collasable_drawer/class/tclass.dart';
-// import 'package:collasable_drawer/wedgits/class.dart';
+
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/constant/class.dart';
-// import 'package:mdrasty_app/student/class/tclass.dart';
-import 'package:mdrasty_app/teacher/class/tclass.dart';
+import 'package:mdrasty_app/view/teacher/class/tclass.dart';
 
 class BottomUserInfo extends StatefulWidget {
  

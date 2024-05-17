@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mdrasty_app/constant/class.dart';
-import 'package:mdrasty_app/teacher/tabbar/mnotification/mnotification.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/mnotification/mnotification.dart';
 import 'package:mdrasty_app/view/supervisor/descution.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
-import 'package:mdrasty_app/teacher/tabbar/profile/profile.dart';
-import 'package:mdrasty_app/teacher/tabbar/schadule/schadule.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/profile/profile.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/schadule/schadule.dart';
 
 
 class tabsbutton extends StatefulWidget {

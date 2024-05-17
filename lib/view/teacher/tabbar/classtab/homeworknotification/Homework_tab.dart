@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
-import 'package:mdrasty_app/teacher/components/drawer/custom_drawer.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
-import 'package:mdrasty_app/teacher/tabbar/test.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 import 'package:page_transition/page_transition.dart';
 
 

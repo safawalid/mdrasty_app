@@ -1,8 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/teacher/components/drawer/custom_drawer.dart';
-import 'package:mdrasty_app/teacher/tabbar/test.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 
 class drawer extends StatefulWidget {
   const drawer({Key? key}) : super(key: key);

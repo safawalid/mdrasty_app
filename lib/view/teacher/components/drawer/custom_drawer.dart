@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/teacher/components/drawer/bottom_user_info.dart';
-import 'package:mdrasty_app/teacher/components/drawer/header.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/diary/diary.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/grads/grads.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/grads/subjects.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/bottom_user_info.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/header.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/diary/diary.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/grads.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/subjects.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'custom_list_tile.dart';
