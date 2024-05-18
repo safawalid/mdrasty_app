@@ -2,16 +2,14 @@
 // import 'package:collasable_drawer/screens/home/drawer.dart';
 // import 'package:collasable_drawer/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/teacher/class/tclass.dart';
-import 'package:mdrasty_app/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
+import 'package:mdrasty_app/view/teacher/class/tclass.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'buttoncolor.dart';
 
 
-void main() {
-  runApp(teacherclass());
-}
+ 
 
 
 

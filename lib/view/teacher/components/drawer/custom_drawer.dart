@@ -1,19 +1,17 @@
 
 import 'package:flutter/material.dart';
+import 'package:mdrasty_app/constant/drawer/custom_list_tile.dart';
+import 'package:mdrasty_app/utility/shared.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/bottom_user_info.dart';
-import 'package:mdrasty_app/view/teacher/components/drawer/header.dart';
-import 'package:mdrasty_app/view/teacher/tabbar/classtab/diary/diary.dart';
+import 'package:mdrasty_app/constant/drawer/header.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/diaryclass/diaryclass.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/grads.dart';
-import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/subjects.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'custom_list_tile.dart';
-// import 'drawer/bottom_user_info.dart';
-// import 'drawer/header.dart';
-// import 'tabbar/classtab/class.dart';
-// import 'tabbar/classtab/homeworknotification/Homework_tab.dart';
-// import 'tabbar/test.dart';
+
+
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -25,26 +23,33 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   bool _isCollapsed = false;
   int _currentTabIndex = 0;
-  int _selectedTabIndex = 0;
+  int _selectedTabIndex = 0; // Now persisted
+  Color activeColor = Colors.grey.shade400;
 
-  // Add the class names here
+  // ... other code
 
-  String _selectedClass = 'Class one'; // Default selected class
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedTabIndex();
+  }
 
-  void _onTabChanged(int newIndex) {
+  void _loadSelectedTabIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    _selectedTabIndex = prefs.getInt('selectedTabIndex') ?? 0;
+    setState(() {});
+  }
+
+  void _onTabChanged(int newIndex) async {
+    final prefs = await DrawerHelper.getDrawerState();
+    activeColor = prefs['color'];
     setState(() {
       _currentTabIndex = newIndex;
       _selectedTabIndex = newIndex;
+      this.activeColor = activeColor;
     });
+    await DrawerHelper.saveDrawerState(newIndex, activeColor);
   }
-
-  void _resetSelectedTabIndex() {
-    setState(() {
-      _selectedTabIndex = _currentTabIndex;
-    });
-  }
-
-  Color activeColor = Colors.blue; // تحديد اللون النشط هنا
 
   @override
   Widget build(BuildContext context) {
@@ -52,17 +57,35 @@ class _CustomDrawerState extends State<CustomDrawer> {
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: GestureDetector(
+          onTap: () {
+            if (_isCollapsed) {
+              setState(() {
+                _isCollapsed = false;
+              });
+            } else {
+              setState(() {
+                _isCollapsed = true;
+              });
+            }
+          },
           child: AnimatedContainer(
             curve: Curves.easeInOutCubic,
             duration: const Duration(milliseconds: 500),
             width: _isCollapsed ? 300 : 70,
             margin: const EdgeInsets.only(bottom: 10, top: 10),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(10),
                 topLeft: Radius.circular(10),
               ),
-              color: Color.fromRGBO(20, 20, 20, 1),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.blue.shade900,
+                  Colors.blue.shade700,
+                  Colors.blue.shade700,
+                  Colors.blue.shade900
+                ],
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -74,32 +97,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   const Divider(
                     color: Colors.grey,
                   ),
-
-                  // CustomListTile(
-                  //   isCollapsed: _isCollapsed,
-                  //   icon: Icons.school_outlined,
-                  //   title: 'الصفوف',
-                  //   infoCount: 4,
-                  //   doHaveMoreOptions: Icons.arrow_forward_ios,
-                  //   onPressed: () {
-                  //     _onTabChanged(4);
-                  //     Navigator.of(context).push(PageTransition(
-                  //       type: PageTransitionType.leftToRight,
-                  //       duration: Duration(milliseconds: 600),
-                  //       reverseDuration: Duration(microseconds: 600),
-                  //       child: teacherclass(),
-                  //     ));
-                  //   },
-                  //   isTabSelected: _selectedTabIndex == 0,
-                  //   activeColor: activeColor, // تحديد اللون النشط هنا
-                  // ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
                     icon: Icons.ac_unit,
                     title: 'الأشعارات',
                     infoCount: 0,
-                    onPressed: () {
+                    onPressed: () async {
                       _onTabChanged(0);
+                      await DrawerHelper.saveDrawerState(0, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -107,16 +112,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: NotificationPage(),
                       ));
                     },
-                    isTabSelected: _selectedTabIndex == 0,
-                    activeColor: activeColor, // تحديد اللون النشط هنا
+                    isTabSelected: _selectedTabIndex ==
+                        0, // Use persisted _selectedTabIndex
+                    activeColor: activeColor,
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
                     icon: Icons.grading_sharp,
                     title: 'الدرجات',
                     infoCount: 0,
-                    onPressed: () {
+                    onPressed: () async {
                       _onTabChanged(1);
+                      await DrawerHelper.saveDrawerState(1, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -124,17 +131,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: StudentMarksPage(),
                       ));
                     },
-                    isTabSelected: _currentTabIndex == 1,
+                    isTabSelected: _selectedTabIndex == 1,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
-                    icon: Icons.book_sharp,
+                     icon: Icons.book_sharp,
                     title: 'الكتاب',
                     infoCount: 0,
-                    doHaveMoreOptions: Icons.arrow_forward_ios,
-                    onPressed: () {
+                    onPressed: () async {
                       _onTabChanged(2);
+                      await DrawerHelper.saveDrawerState(2, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -142,16 +149,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: NotificationPage(),
                       ));
                     },
-                    isTabSelected: _currentTabIndex == 2,
+                    isTabSelected: _selectedTabIndex == 2,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
-                    icon: Icons.note_alt_rounded,
+                   icon: Icons.note_alt_rounded,
                     title: ' الواجبات',
                     infoCount: 8,
-                    onPressed: () {
+                    onPressed: () async {
                       _onTabChanged(3);
+                      await DrawerHelper.saveDrawerState(3, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -159,7 +167,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: NotificationPage(),
                       ));
                     },
-                    isTabSelected: _currentTabIndex == 3,
+                    isTabSelected: _selectedTabIndex == 3,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
@@ -167,9 +175,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     icon: Icons.note,
                     title: 'الشروحات',
                     infoCount: 0,
-                    doHaveMoreOptions: Icons.arrow_forward_ios,
-                    onPressed: () {
+                    onPressed: () async {
                       _onTabChanged(4);
+                      await DrawerHelper.saveDrawerState(4, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -177,7 +185,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: diary(),
                       ));
                     },
-                    isTabSelected: _currentTabIndex == 4,
+                    isTabSelected: _selectedTabIndex == 4,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
@@ -185,8 +193,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     icon: Icons.question_answer,
                     title: 'الاسئله',
                     infoCount: 2,
-                    onPressed: () {
+                    onPressed: () async {
                       _onTabChanged(5);
+                      await DrawerHelper.saveDrawerState(5, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -194,16 +203,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: NotificationPage(),
                       ));
                     },
-                    isTabSelected: _currentTabIndex == 5,
+                    isTabSelected: _selectedTabIndex == 5,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
                     icon: Icons.event_sharp,
                     title: 'التقيم',
-                    infoCount: 0,
-                    onPressed: () {
+                    infoCount: 2,
+                    onPressed: () async {
                       _onTabChanged(6);
+                      await DrawerHelper.saveDrawerState(5, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
@@ -211,9 +221,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: NotificationPage(),
                       ));
                     },
-                    isTabSelected: _currentTabIndex == 6,
+                    isTabSelected: _selectedTabIndex == 6,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
+                  
                   const Divider(
                     color: Colors.grey,
                   ),
@@ -235,7 +246,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       onPressed: () {
                         setState(() {
                           _isCollapsed = !_isCollapsed;
-                          _resetSelectedTabIndex();
                         });
                       },
                     ),

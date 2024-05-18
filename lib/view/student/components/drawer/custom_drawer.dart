@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mdrasty_app/constant/drawer/custom_list_tile.dart';
+import 'package:mdrasty_app/constant/drawer/header.dart';
 import 'package:mdrasty_app/utility/shared.dart';
 import 'package:mdrasty_app/view/student/components/drawer/bottom_user_info.dart';
-import 'package:mdrasty_app/view/student/components/drawer/header.dart';
+
 import 'package:mdrasty_app/view/student/lesson.dart';
 import 'package:mdrasty_app/view/student/pdf.dart';
 import 'package:mdrasty_app/view/student/questions.dart';
@@ -10,8 +12,6 @@ import 'package:mdrasty_app/view/student/viewnotification.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../rating.dart';
-import 'custom_list_tile.dart';
-
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -31,59 +31,61 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     super.initState();
-    _loadSelectedTabIndex(); 
+    _loadSelectedTabIndex();
   }
 
   void _loadSelectedTabIndex() async {
-    
     final prefs = await SharedPreferences.getInstance();
     _selectedTabIndex = prefs.getInt('selectedTabIndex') ?? 0;
     setState(() {});
   }
 
   void _onTabChanged(int newIndex) async {
-    final prefs = await DrawerHelper .getDrawerState();
+    final prefs = await DrawerHelper.getDrawerState();
     activeColor = prefs['color'];
     setState(() {
       _currentTabIndex = newIndex;
-      _selectedTabIndex = newIndex; 
+      _selectedTabIndex = newIndex;
       this.activeColor = activeColor;
     });
     await DrawerHelper.saveDrawerState(newIndex, activeColor);
   }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
         child: GestureDetector(
-           onTap: () {
-    if (_isCollapsed) {
-      setState(() {
-        _isCollapsed = false;
-      });
-    } else {
-      setState(() {
-        _isCollapsed = true;
-      });
-    }
-  },
+          onTap: () {
+            if (_isCollapsed) {
+              setState(() {
+                _isCollapsed = false;
+              });
+            } else {
+              setState(() {
+                _isCollapsed = true;
+              });
+            }
+          },
           child: AnimatedContainer(
             curve: Curves.easeInOutCubic,
             duration: const Duration(milliseconds: 500),
             width: _isCollapsed ? 300 : 70,
             margin: const EdgeInsets.only(bottom: 10, top: 10),
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(10),
                 topLeft: Radius.circular(10),
               ),
-                gradient: LinearGradient(
-        colors: [
-          Colors.blue.shade900, Colors.blue.shade700,
-                                              Colors.blue.shade700, Colors.blue.shade900
-        ],
-      ),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.blue.shade900,
+                  Colors.blue.shade700,
+                  Colors.blue.shade700,
+                  Colors.blue.shade900
+                ],
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -95,24 +97,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   const Divider(
                     color: Colors.grey,
                   ),
-                 CustomListTile(
-      isCollapsed: _isCollapsed,
-      icon: Icons.menu_book,
-      title: 'الكتاب',
-      infoCount: 0,
-      onPressed: () async {
-        _onTabChanged(0);
-        await DrawerHelper.saveDrawerState(0, activeColor);
-        Navigator.of(context).push(PageTransition(
-          type: PageTransitionType.leftToRight,
-          duration: Duration(milliseconds: 600),
-          reverseDuration: Duration(microseconds: 600),
-          child: PDFScreen(),
-        ));
-      },
-      isTabSelected: _selectedTabIndex == 0, // Use persisted _selectedTabIndex
-      activeColor: activeColor,
-    ),
+                  CustomListTile(
+                    isCollapsed: _isCollapsed,
+                    icon: Icons.menu_book,
+                    title: 'الكتاب',
+                    infoCount: 0,
+                    onPressed: () async {
+                      _onTabChanged(0);
+                      await DrawerHelper.saveDrawerState(0, activeColor);
+                      Navigator.of(context).push(PageTransition(
+                        type: PageTransitionType.leftToRight,
+                        duration: Duration(milliseconds: 600),
+                        reverseDuration: Duration(microseconds: 600),
+                        child: PDFScreen(),
+                      ));
+                    },
+                    isTabSelected: _selectedTabIndex ==
+                        0, // Use persisted _selectedTabIndex
+                    activeColor: activeColor,
+                  ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
                     icon: Icons.assignment,
@@ -128,7 +131,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: viewassigment(),
                       ));
                     },
-                    isTabSelected: _selectedTabIndex  == 1,
+                    isTabSelected: _selectedTabIndex == 1,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
@@ -146,7 +149,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: viewnotifisuper(),
                       ));
                     },
-                      isTabSelected: _selectedTabIndex  == 2,
+                    isTabSelected: _selectedTabIndex == 2,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
@@ -164,7 +167,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: RatingScreen(),
                       ));
                     },
-                    isTabSelected: _selectedTabIndex  == 3,
+                    isTabSelected: _selectedTabIndex == 3,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
@@ -182,7 +185,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: lesson(),
                       ));
                     },
-                      isTabSelected: _selectedTabIndex  == 4,
+                    isTabSelected: _selectedTabIndex == 4,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   CustomListTile(
@@ -200,7 +203,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         child: questions(),
                       ));
                     },
-                      isTabSelected: _selectedTabIndex  ==  5,
+                    isTabSelected: _selectedTabIndex == 5,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   const Divider(
@@ -224,7 +227,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       onPressed: () {
                         setState(() {
                           _isCollapsed = !_isCollapsed;
-                        
                         });
                       },
                     ),

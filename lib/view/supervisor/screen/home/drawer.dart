@@ -1,7 +1,8 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
+import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
+import 'package:mdrasty_app/view/supervisor/descution.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 
 class drawer extends StatefulWidget {
@@ -43,7 +44,7 @@ class tabcontent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (currentTabIndex == 0) {
-      return tabcontent(this.currentTabIndex);
+      return descution();
     } 
     else {
       // Add more conditions for additional tabs

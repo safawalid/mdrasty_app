@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mdrasty_app/constant/appbar.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
+
 
 
 
@@ -53,6 +55,7 @@ class _StudentMarksPageState extends State<StudentMarksPage> {
       appBar: CustomAppBar(
         title: 'Student Marks',
       ),
+      endDrawer: CustomDrawer(),
       body: Column(
         children: [
           Padding(

@@ -9,64 +9,55 @@ import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart'
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/grads.dart';
 import 'package:page_transition/page_transition.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Dashboard(),
-    );
-  }
-}
 
 class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(title: 'المواد'),
-      endDrawer: const CustomDrawer(),
-      body: GridView.count(
-        crossAxisCount: 2, // Display two items in each row
-        mainAxisSpacing: 20.0, // Vertical spacing between rows
-        crossAxisSpacing: 20.0, // Horizontal spacing between items
-        padding: EdgeInsets.all(10.0),
-        children: [
-          SubjectContainer(
-            subjectName: 'chemistry',
-            imagePath: 'img/science.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'Math',
-            imagePath: 'img/math.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'phisics',
-            imagePath: 'img/phisics.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'biology',
-            imagePath: 'img/biology.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'Arabic',
-            imagePath: 'img/arabic.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'English',
-            imagePath: 'img/english.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'Qura\'an',
-            imagePath: 'img/quran.jpg',
-          ),
-          SubjectContainer(
-            subjectName: 'Eslamic',
-            imagePath: 'img/eslamic.jpg',
-          ),
-        ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: CustomAppBar(title: 'المواد'),
+        endDrawer: const CustomDrawer(),
+        body: GridView.count(
+          crossAxisCount: 2, // Display two items in each row
+          mainAxisSpacing: 20.0, // Vertical spacing between rows
+          crossAxisSpacing: 20.0, // Horizontal spacing between items
+          padding: EdgeInsets.all(10.0),
+          children: [
+            SubjectContainer(
+              subjectName: 'chemistry',
+              imagePath: 'img/science.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'Math',
+              imagePath: 'img/math.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'phisics',
+              imagePath: 'img/phisics.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'biology',
+              imagePath: 'img/biology.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'Arabic',
+              imagePath: 'img/arabic.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'English',
+              imagePath: 'img/english.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'Qura\'an',
+              imagePath: 'img/quran.jpg',
+            ),
+            SubjectContainer(
+              subjectName: 'Eslamic',
+              imagePath: 'img/eslamic.jpg',
+            ),
+          ],
+        ),
       ),
     );
   }
