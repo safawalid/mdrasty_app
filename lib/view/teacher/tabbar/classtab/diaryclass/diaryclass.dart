@@ -1,14 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
+import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 import 'package:page_transition/page_transition.dart';
-
 
 class diary extends StatefulWidget {
   @override
@@ -17,10 +16,32 @@ class diary extends StatefulWidget {
 
 class _diaryState extends State<diary> {
   List<Map<String, dynamic>> notifications = [];
+  String _searchText = '';
+  final TextEditingController _searchController = TextEditingController();
+  List<String> _filteredNames = [];
+  bool _isBackPressed = false;
+
+  void _filterNames(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredNames = notifications
+            .map((notification) => notification['title'] as String)
+            .toList();
+      } else {
+        _filteredNames = notifications
+            .where((notification) => notification['title'].contains(query))
+            .map((notification) => notification['title'] as String)
+            .toList();
+      }
+    });
+  }
 
   void _addNotification(Map<String, dynamic> notification) {
     setState(() {
       notifications.add(notification);
+      _filteredNames = notifications
+          .map((notification) => notification['title'] as String)
+          .toList();
     });
   }
 
@@ -65,173 +86,145 @@ class _diaryState extends State<diary> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: CustomAppBar(title: 'الشروحات'),
+        appBar: CustomAppBar(title: 'شروحات'),
+        resizeToAvoidBottomInset: false,
         endDrawer: const CustomDrawer(),
-        body: ListView.builder(
-          itemCount: notifications.length,
-          itemBuilder: (context, index) {
-            var notification = notifications[index];
-            bool isPressed = false;
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Column(
+              children: [
+                SearchBar(
+                  controller: _searchController,
+                  onChanged: _filterNames,
+                  noResults: _filteredNames.isEmpty &&
+                      _searchController.text.isNotEmpty,
+                ),
+              ],
+            ),
+            Expanded(
+                child: ListView.builder(
+              itemCount: _filteredNames.length,
+              itemBuilder: (context, index) {
+                var notificationTitle = _filteredNames[index];
+                var notification = notifications.firstWhere((notification) =>
+                    notification['title'] == notificationTitle);
 
-            return Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Material(
-                    elevation: 9, // Add elevation for a shadow effect
-                    borderRadius:
-                        BorderRadius.circular(13.0), // Rounded corners
-                    child: Column(
-                      children: [
-                        ListTile(
-                          // Top left corner
-                          // Three dots on the left side
-                          title: Center(
-                            // Title centered in the same row
-                            child: Text(
-                              notification['title'],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: MediaQuery.of(context).size.width *
-                                    0.05, // Adjust font size
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        elevation: 4, // Remove card elevation
+                        color: Colors.white, // Transparent card background
+                        child: Column(
+                          children: [
+                            ListTile(
+                              // Top left corner
+                              leading: PopupMenuButton<String>(
+                                onSelected: (value) {
+                                  if (value == 'edit') {
+                                    _showAddNotificationDialog(
+                                      notification: notification,
+                                      index: index,
+                                    );
+                                  } else if (value == 'delete') {
+                                    _deleteNotification(index);
+                                  }
+                                },
+                                itemBuilder: (context) => [
+                                  PopupMenuItem<String>(
+                                    value: 'edit',
+                                    child: Text('Edit'),
+                                  ),
+                                  PopupMenuItem<String>(
+                                    value: 'delete',
+                                    child: Text('Delete'),
+                                  ),
+                                ],
+                              ), // Three dots on the left side
+
+                              // Timestamp on the top left corner
+                            ),
+                            // Title on the top  corner
+                            const SizedBox(
+                              height: 10,
+                            ),
+
+                            Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    notification['title'],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05, // Adjust font size
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(30, 8, 30, 8),
+                                  child: Divider(
+                                    color: Colors.grey.shade700,
+                                    height: 5,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  notification['content'],
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.right,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                ),
+                              ],
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 20),
+                              child: CustomGradientButton(
+                                buttonText: ' عرض اسئلة الطلاب',
+                                onPressed: () {
+                                  Navigator.of(context).push(PageTransition(
+                                    type: PageTransitionType.leftToRight,
+                                    duration: Duration(milliseconds: 600),
+                                    reverseDuration:
+                                        Duration(microseconds: 600),
+                                    child: ViewHomeworkTab(),
+                                  ));
+                                },
+                                hasHomework: true,
                               ),
                             ),
-                          ),
-                          leading: PopupMenuButton<String>(
-                            onSelected: (value) {
-                              if (value == 'edit') {
-                                _showAddNotificationDialog(
-                                  notification: notification,
-                                  index: index,
-                                );
-                              } else if (value == 'delete') {
-                                _deleteNotification(index);
-                              }
-                            },
-                            itemBuilder: (context) => [
-                              PopupMenuItem<String>(
-                                value: 'edit',
-                                child: Text('Edit'),
-                              ),
-                              PopupMenuItem<String>(
-                                value: 'delete',
-                                child: Text('Delete'),
-                              ),
-                            ],
-                          ),
-                          // Timestamp on the top left corner
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
-                        Card(
-                          elevation: 0, // Remove card elevation
-                          color:
-                              Colors.transparent, // Transparent card background
-                          child: Column(
-                            children: [
-                              // Title on the top  corner
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              Column(
-                                children: [
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
-                                              30, 8, 30, 8),
-                                          child: Divider(
-                                            color: Colors.grey.shade700,
-                                            height: 5,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text(
-                                          notification['content'],
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        SizedBox(
-                                          height: 40,
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-
-                              const SizedBox(
-                                height: 10,
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 20),
-                                child: CustomGradientButton(
-                                  buttonText: ' عرض اسئلة الطلاب',
-                                  onPressed: () {
-                                    Navigator.of(context).push(PageTransition(
-                                      type: PageTransitionType.leftToRight,
-                                      duration: Duration(milliseconds: 600),
-                                      reverseDuration:
-                                          Duration(microseconds: 600),
-                                      child: ViewHomeworkTab(),
-                                    ));
-                                  },
-                                  hasHomework: true,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          // alignment: Alignment.bottomLeft,
-                          child: Text(
-                            DateFormat(' dd/MM/yyyy ')
-                                .format(notification['timestamp']),
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          // alignment: Alignment.bottomRight,
-                          child: Text(
-                            DateFormat(' HH:MM ')
-                                .format(notification['timestamp']),
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
+                  ],
+                );
+              },
+            )),
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddNotificationDialog(),
-          tooltip: 'Add Notification',
+          tooltip: 'اضف اشعار ',
           child: Icon(Icons.add),
           backgroundColor: Colors.blue.shade900,
         ),
@@ -342,7 +335,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              widget.notification == null ? 'واجب جديد' : 'تعديل الواجب',
+              widget.notification == null ? 'شرح جديد' : 'تعديل الشرح',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 28,
@@ -429,22 +422,14 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                             return null; // Input is valid
                           },
                         )),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(_attachedFile != null
-                                ? 'File attached'
-                                : 'Attach file'),
-                            // Add some space between the text and the icon
-                            Icon(Icons.attach_file),
-                          ],
-                        ),
-                        onTap: _pickFile,
-                      ),
+                    ListTile(
+                      title: Text(_attachedFile != null
+                          ? 'File attached'
+                          : 'Attach file'),
+                      trailing: Icon(Icons.attach_file),
+                      onTap: _pickFile,
                     ),
+                    SizedBox(height: 15),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

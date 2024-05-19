@@ -1,6 +1,7 @@
 // import 'package:collasable_drawer/wedgits/buttoncolor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mdrasty_app/constant/appbarchild.dart';
 import 'dart:convert';
 
 import 'package:mdrasty_app/constant/buttoncolor.dart';
@@ -60,19 +61,7 @@ class _ViewHomeworkTabState extends State<ViewHomeworkTab> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+        appBar: appbarchild(title: 'الواجبات المرسله'),
         body: SafeArea(
           child: Column(
             children: [

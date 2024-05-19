@@ -89,7 +89,7 @@ class _NotificationPageState extends State<NotificationPage> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: CustomAppBar(title: 'اشعارات'),
+        appBar: CustomAppBar(title: 'الواجبات'),
         resizeToAvoidBottomInset: false,
         endDrawer: const CustomDrawer(),
         body: Column(

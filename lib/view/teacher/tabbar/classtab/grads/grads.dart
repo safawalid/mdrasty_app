@@ -1,16 +1,11 @@
-// import 'package:collasable_drawer/wedgits/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mdrasty_app/constant/appbar.dart';
+import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
-
-
-
-
-
-
+import 'package:mdrasty_app/constant/fontstyle.dart';
 
 class StudentMarksPage extends StatefulWidget {
   @override
@@ -31,8 +26,8 @@ class _StudentMarksPageState extends State<StudentMarksPage> {
   }
 
   Future<List<Student>> fetchStudents() async {
-    final response = await http.get(Uri.parse(
-        'https://my.api.mockaroo.com/students_marks?key=7bf0ba50'));
+    final response = await http.get(
+        Uri.parse('https://my.api.mockaroo.com/students_marks?key=7bf0ba50'));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
@@ -48,173 +43,153 @@ class _StudentMarksPageState extends State<StudentMarksPage> {
     }
   }
 
+  void _searchStudents(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        filteredStudents = List.from(originalStudents);
+        showNoResults = false;
+      } else {
+        filteredStudents = originalStudents
+            .where((student) =>
+                student.firstName.toLowerCase().contains(value.toLowerCase()) ||
+                student.lastName.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+        showNoResults = filteredStudents.isEmpty;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-        title: 'Student Marks',
-      ),
-      endDrawer: CustomDrawer(),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: TextField(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(
+          title: 'درجات الطلاب',
+        ),
+        drawer: CustomDrawer(),
+        body: Column(
+          children: [
+            SearchBar(
               controller: searchController,
-              onChanged: (value) {
-                setState(() {
-                  if (value.isEmpty) {
-                    filteredStudents = List.from(originalStudents);
-                    showNoResults = false;
+              onChanged: _searchStudents,
+              noResults: showNoResults,
+            ),
+            Expanded(
+              child: FutureBuilder<List<Student>>(
+                future: futureStudents,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  } else if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: filteredStudents.length,
+                      itemBuilder: (context, index) {
+                        final student = filteredStudents[index];
+
+                        return Card(
+                          elevation: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Center(
+                                  child: Text(
+                                    '${student.firstName} ${student.lastName}',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                Row(
+                                  children: [
+                                    Text(
+                                      ': ختبار الشهر الاول ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: 'ادخل الدرجه',
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Text(
+                                      ': ختبار الشهر الثاني ',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: 'ادخل الدرجه',
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Text(
+                                      ': الامتحان الفصلي',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: TextField(
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          hintText: 'ادخل الدرجه',
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
                   } else {
-                    filteredStudents = originalStudents
-                        .where((student) =>
-                            student.firstName
-                                .toLowerCase()
-                                .contains(value.toLowerCase()) ||
-                            student.lastName
-                                .toLowerCase()
-                                .contains(value.toLowerCase()))
-                        .toList();
-                    showNoResults = filteredStudents.isEmpty;
+                    return Center(
+                      child: Text('لا توجد بيانات'),
+                    );
                   }
-                });
-              },
-              decoration: InputDecoration(
-                labelText: 'Search Students by Name',
-                prefixIcon: Icon(Icons.search),
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                filled: true,
-                fillColor: Colors.grey[
-                    200], // Change the color to your desired background color
-                focusColor: Colors.blue,
+                },
               ),
             ),
-          ),
-          if (showNoResults)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('No results found'),
-            ),
-          Expanded(
-            child: FutureBuilder<List<Student>>(
-              future: futureStudents,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else if (snapshot.hasData) {
-                  return ListView.builder(
-                    itemCount: filteredStudents.length,
-                    itemBuilder: (context, index) {
-                      final student = filteredStudents[index];
-
-                      return Card(
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Displaying the student's name
-                              Center(
-                                child: Text(
-                                  '${student.firstName} ${student.lastName}',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              SizedBox(height: 16), // Adding some spacing
-
-                              // Row for Month 1 exam mark
-                              Row(
-                                children: [
-                                  Text(
-                                    'Month 1:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10), // Adding some spacing
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Enter Month 1 Exam Mark',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 8), // Adding some spacing
-
-                              // Row for Month 2 exam mark
-                              Row(
-                                children: [
-                                  Text(
-                                    'Month 2:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10), // Adding some spacing
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Enter Month 2 Exam Mark',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 8), // Adding some spacing
-
-                              // Row for Final Exam mark
-                              Row(
-                                children: [
-                                  Text(
-                                    'Final Exam:',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10), // Adding some spacing
-                                  Expanded(
-                                    child: TextField(
-                                      decoration: InputDecoration(
-                                        hintText: 'Enter Final Exam Mark',
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                } else {
-                  return Center(
-                    child: Text('No data available'),
-                  );
-                }
-              },
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
