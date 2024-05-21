@@ -1,11 +1,10 @@
-// import 'package:collasable_drawer/wedgits/buttoncolor.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:mdrasty_app/constant/appbarchild.dart';
 import 'dart:convert';
 
 import 'package:mdrasty_app/constant/buttoncolor.dart';
-
+import 'package:mdrasty_app/constant/searchbar.dart'; // Import the SearchBar class
 
 class Homework {
   final String studentName;
@@ -31,16 +30,14 @@ class _ViewHomeworkTabState extends State<ViewHomeworkTab> {
   bool showNoResults = false;
 
   Future<void> fetchHomeworks() async {
-    final response =
-        await http.get(Uri.parse('https://my.api.mockaroo.com/stident_hw?key=7bf0ba50'));
+    final response = await http.get(Uri.parse('https://my.api.mockaroo.com/stident_hw?key=7bf0ba50'));
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       setState(() {
         originalHomeworks = jsonData.map((item) {
           return Homework(
             studentName: item['name'],
-            studentAvatarUrl:
-              item ['profile_picture'],
+            studentAvatarUrl: item['profile_picture'],
             date: item['date'],
           );
         }).toList();
@@ -56,6 +53,20 @@ class _ViewHomeworkTabState extends State<ViewHomeworkTab> {
     searchController = TextEditingController();
   }
 
+  void _searchHomeworks(String value) {
+    setState(() {
+      if (value.isEmpty) {
+        filteredHomeworks = List.from(originalHomeworks);
+        showNoResults = false;
+      } else {
+        filteredHomeworks = originalHomeworks
+            .where((homework) => homework.studentName.contains(value))
+            .toList();
+        showNoResults = filteredHomeworks.isEmpty;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -65,48 +76,10 @@ class _ViewHomeworkTabState extends State<ViewHomeworkTab> {
         body: SafeArea(
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.indigo.shade50,
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Row(
-                      children: [
-                        Icon(Icons.search),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: TextField(
-                            controller: searchController,
-                            onChanged: (value) {
-                              setState(() {
-                                if (value.isEmpty) {
-                                  filteredHomeworks =
-                                      List.from(originalHomeworks);
-                                  showNoResults = false;
-                                } else {
-                                  filteredHomeworks = originalHomeworks
-                                      .where((homework) =>
-                                          homework.studentName.contains(value))
-                                      .toList();
-                                  showNoResults = filteredHomeworks.isEmpty;
-                                }
-                              });
-                            },
-                            decoration: InputDecoration(
-                              hintText: 'ابحث عن الواجب',
-                              border: InputBorder.none,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              SearchBar(
+                controller: searchController,
+                onChanged: _searchHomeworks,
+                noResults: showNoResults,
               ),
               SizedBox(height: 20),
               Expanded(
@@ -139,80 +112,77 @@ class _ViewHomeworkTabState extends State<ViewHomeworkTab> {
                                     ),
                                   ),
                                 ),
-                              Container(
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: filteredHomeworks.length,
-                                  itemBuilder: (context, index) {
-                                    var homework = filteredHomeworks[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Material(
-                                                elevation: 5,
-                                                shape: CircleBorder(),
-                                                child: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                    homework.studentAvatarUrl,
-                                                  ),
-                                                  radius: 30,
-                                                  backgroundColor: Colors.white,
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: filteredHomeworks.length,
+                                itemBuilder: (context, index) {
+                                  var homework = filteredHomeworks[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Material(
+                                              elevation: 5,
+                                              shape: CircleBorder(),
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                  homework.studentAvatarUrl,
                                                 ),
-                                              ),
-                                              SizedBox(width: 10),
-                                              Expanded(
-                                                child: Text(
-                                                  homework.studentName,
-                                                ),
-                                              ),
-                                              Text(homework.date),
-                                            ],
-                                          ),
-                                          SizedBox(height: 10),
-                                          Card(
-                                            elevation: 3,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                children: [
-                                                  SizedBox(height: 10),
-                                                  // Button to display student's homework
-                                                  CustomGradientButton(
-                                                    buttonText: "عرض الحل",
-                                                  ),
-                                                  SizedBox(height: 10),
-                                                  // Text field for teacher to add homework mark
-                                                  TextFormField(
-                                                    textAlign: TextAlign.center,
-                                                    keyboardType: TextInputType.number,
-                                                    decoration: InputDecoration(
-                                                      labelText: "اضف الدرجة",
-                                                      border: OutlineInputBorder(),
-                                                    ),
-                                                    validator: (value) {
-                                                      if (value == null ||
-                                                          value.isEmpty ||
-                                                          !RegExp(r'^[0-9]+$')
-                                                              .hasMatch(value)) {
-                                                        return 'ادخل رقم فقط';
-                                                      }
-                                                      return null;
-                                                    },
-                                                  ),
-                                                ],
+                                                radius: 30,
+                                                backgroundColor: Colors.white,
                                               ),
                                             ),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Text(
+                                                homework.studentName,
+                                              ),
+                                            ),
+                                            Text(homework.date),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10),
+                                        Card(
+                                          elevation: 3,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                SizedBox(height: 10),
+                                                // Button to display student's homework
+                                                CustomGradientButton(
+                                                  buttonText: "عرض الحل",
+                                                ),
+                                                SizedBox(height: 10),
+                                                // Text field for teacher to add homework mark
+                                                TextFormField(
+                                                  textAlign: TextAlign.center,
+                                                  keyboardType: TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    labelText: "اضف الدرجة",
+                                                    border: OutlineInputBorder(),
+                                                  ),
+                                                  validator: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty ||
+                                                        !RegExp(r'^[0-9]+$').hasMatch(value)) {
+                                                      return 'ادخل رقم فقط';
+                                                    }
+                                                    return null;
+                                                  },
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

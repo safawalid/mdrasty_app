@@ -88,7 +88,7 @@ class _diaryState extends State<diary> {
       child: Scaffold(
         appBar: CustomAppBar(title: 'شروحات'),
         resizeToAvoidBottomInset: false,
-        endDrawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

@@ -66,7 +66,7 @@ class _notsparentState extends State<notsparent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  appbarchild(title: "التقييم"),
-        endDrawer: Drawerparent(),
+        drawer: Drawerparent(),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Container(

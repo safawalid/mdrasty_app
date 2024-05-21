@@ -445,7 +445,7 @@ class _GradsState extends State<Grads> {
             ])),
           ),
         ),// تغيير لون الخلفية
-       endDrawer: const CustomDrawer(),
+       drawer: const CustomDrawer(),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(30.0),

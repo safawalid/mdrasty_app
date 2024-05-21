@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
-import 'package:mdrasty_app/view/supervisor/descution.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/descution.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 
 class drawer extends StatefulWidget {
@@ -29,7 +29,7 @@ class _drawerState extends State<drawer> {
         //   elevation: 0,
         //   backgroundColor: Colors.transparent,
         // ),
-        endDrawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: tabcontent(_currentTabIndex),
       ),
     );

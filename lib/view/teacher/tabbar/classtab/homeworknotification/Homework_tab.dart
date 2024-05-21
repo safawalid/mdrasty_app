@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
+import 'package:mdrasty_app/constant/drawer/testsearch.dart';
 import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
@@ -91,7 +92,7 @@ class _NotificationPageState extends State<NotificationPage> {
       child: Scaffold(
         appBar: CustomAppBar(title: 'الواجبات'),
         resizeToAvoidBottomInset: false,
-        endDrawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -253,7 +254,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                     duration: Duration(milliseconds: 600),
                                     reverseDuration:
                                         Duration(microseconds: 600),
-                                    child: ViewHomeworkTab(),
+                                    child: ViewHomeworkTabtest(),
                                   ));
                                 },
                                 hasHomework: true,

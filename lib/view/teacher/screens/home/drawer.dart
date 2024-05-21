@@ -28,7 +28,7 @@ class _drawerState extends State<drawer> {
         //   elevation: 0,
         //   backgroundColor: Colors.transparent,
         // ),
-        endDrawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: tabcontent(_currentTabIndex),
       ),
     );

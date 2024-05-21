@@ -91,7 +91,7 @@ class _descutionState extends State<descution> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: CustomAppBar(title: 'مناقشه'),
-        endDrawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [

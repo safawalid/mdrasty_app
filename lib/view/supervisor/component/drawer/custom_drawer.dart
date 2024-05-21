@@ -3,8 +3,9 @@ import 'package:mdrasty_app/constant/drawer/custom_list_tile.dart';
 import 'package:mdrasty_app/constant/drawer/header.dart';
 import 'package:mdrasty_app/utility/shared.dart';
 import 'package:mdrasty_app/view/supervisor/component/drawer/bottom_user_info.dart';
-import 'package:mdrasty_app/view/supervisor/descution.dart';
-import 'package:mdrasty_app/view/supervisor/tabs/subjects.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/attendentSV.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/descution.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/grads/subjects.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -123,7 +124,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: descution(),
+                        child: Dashboard(),
                       ));
                     },
                     isTabSelected: _selectedTabIndex == 1,
@@ -149,17 +150,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
-                    icon: Icons.star,
-                    title: ' التقييم',
-                    infoCount: 8,
+                    icon: Icons.book_online_sharp,
+                    title: 'تحضير',
+                    infoCount: 0,
                     onPressed: () async {
-                      _onTabChanged(3);
-                      await DrawerHelper.saveDrawerState(3, activeColor);
+                      _onTabChanged(2);
+                      await DrawerHelper.saveDrawerState(2, activeColor);
                       Navigator.of(context).push(PageTransition(
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: Dashboard(),
+                        child: attendentSV(),
                       ));
                     },
                     isTabSelected: _selectedTabIndex == 3,

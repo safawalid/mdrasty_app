@@ -1,16 +1,17 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/appbarchild.dart';
 import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/constant/fontstyle.dart';
 
-
-class attendmanager extends StatefulWidget {
+class attendentSV extends StatefulWidget {
   @override
-  _attendmanagerState createState() => _attendmanagerState();
+  _attendentSVState createState() => _attendentSVState();
 }
 
-class _attendmanagerState extends State<attendmanager> {
+class _attendentSVState extends State<attendentSV> {
   final TextEditingController _searchController = TextEditingController();
   bool _isBackPressed = false;
   List<String> names = ['أحمد', 'فاطمة', 'يوسف'];
@@ -38,10 +39,8 @@ class _attendmanagerState extends State<attendmanager> {
       }
     });
   }
-  void _saveAttendance() {
-   
-  }
 
+  void _saveAttendance() {}
 
   @override
   void _cancelAttendance() {
@@ -52,8 +51,7 @@ class _attendmanagerState extends State<attendmanager> {
       }
     });
   }
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -63,7 +61,7 @@ class _attendmanagerState extends State<attendmanager> {
           FocusScope.of(context).unfocus();
         },
         child: Scaffold(
-          appBar: CustomAppBar(title: "مدرستي"),
+          appBar: CustomAppBar(title: "تحضير االطلاب"),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -72,7 +70,8 @@ class _attendmanagerState extends State<attendmanager> {
                   SearchBar(
                     controller: _searchController,
                     onChanged: _filterNames,
-                    noResults: _filteredNames.isEmpty && _searchController.text.isNotEmpty,
+                    noResults: _filteredNames.isEmpty &&
+                        _searchController.text.isNotEmpty,
                   ),
                 ],
               ),
@@ -82,7 +81,8 @@ class _attendmanagerState extends State<attendmanager> {
                   itemBuilder: (context, index) {
                     String name = _filteredNames[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 20.0),
                       child: Card(
                         elevation: 5.0,
                         shape: RoundedRectangleBorder(
@@ -154,8 +154,6 @@ class _attendmanagerState extends State<attendmanager> {
               ),
             ],
           ),
-        
-
           floatingActionButton: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/constant/fontstyle.dart';
+
 class SearchBar extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onChanged;
@@ -56,10 +57,7 @@ class SearchBar extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Center(
-                child: Text(
-                  'لا توجد نتائج',
-                  style:fontstyle.fontheading
-                ),
+                child: Text('لا توجد نتائج', style: fontstyle.fontheading),
               ),
             ),
         ],
@@ -67,4 +65,3 @@ class SearchBar extends StatelessWidget {
     );
   }
 }
-

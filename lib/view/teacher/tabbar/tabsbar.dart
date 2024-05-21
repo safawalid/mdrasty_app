@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mdrasty_app/constant/class.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/mnotification/mnotification.dart';
-import 'package:mdrasty_app/view/supervisor/descution.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/descution.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/profile/profile.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/schadule/schadule.dart';
@@ -41,7 +41,7 @@ class _tabsbuttonState extends State<tabsbutton> {
             body: IndexedStack(
               index: _currentIndex,
               children: [
-                ProfilePage(),
+                Profileteacher(),
                 WeeklySchedule(),
                 teacherclass(),
                 descution(),
@@ -50,7 +50,7 @@ class _tabsbuttonState extends State<tabsbutton> {
                 // TeacherProfile(),
                 // Profile content
                 ViewNotification(),
-                NotificationPage(),
+                // NotificationPage(),
               ],
             ),
             bottomNavigationBar: Container(
@@ -113,7 +113,7 @@ class _tabsbuttonState extends State<tabsbutton> {
     Icons.class__outlined,
     Icons.home_max,
     Icons.notifications_active,
-    Icons.menu_book,
+    
   ];
 
   List<String> listOfStrings = [
@@ -122,6 +122,6 @@ class _tabsbuttonState extends State<tabsbutton> {
     'الفصول',
     'فصلي',
     'الاشعارات',
-    'المواد',
+    
   ];
 }

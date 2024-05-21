@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 
 import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
-import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/grads.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/grads/students_marks_SV.dart';
 import 'package:page_transition/page_transition.dart';
 
 
@@ -17,7 +17,7 @@ class Dashboard extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: CustomAppBar(title: 'المواد'),
-        endDrawer: const CustomDrawer(),
+        drawer: const CustomDrawer(),
         body: GridView.count(
           crossAxisCount: 2, // Display two items in each row
           mainAxisSpacing: 20.0, // Vertical spacing between rows
@@ -82,7 +82,7 @@ class SubjectContainer extends StatelessWidget {
           childCurrent: this,
           duration: Duration(milliseconds: 600),
           reverseDuration: Duration(microseconds: 600),
-          child: StudentMarksPage(),
+          child: StudentsMarks_SVA(),
         ));
       },
       child: Container(

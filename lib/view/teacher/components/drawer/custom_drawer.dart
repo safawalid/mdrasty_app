@@ -206,24 +206,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     isTabSelected: _selectedTabIndex == 5,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
-                  CustomListTile(
-                    isCollapsed: _isCollapsed,
-                    icon: Icons.event_sharp,
-                    title: 'التقيم',
-                    infoCount: 2,
-                    onPressed: () async {
-                      _onTabChanged(6);
-                      await DrawerHelper.saveDrawerState(5, activeColor);
-                      Navigator.of(context).push(PageTransition(
-                        type: PageTransitionType.leftToRight,
-                        duration: Duration(milliseconds: 600),
-                        reverseDuration: Duration(microseconds: 600),
-                        child: NotificationPage(),
-                      ));
-                    },
-                    isTabSelected: _selectedTabIndex == 6,
-                    activeColor: activeColor, // تحديد اللون النشط هنا
-                  ),
+                  
                   
                   const Divider(
                     color: Colors.grey,
@@ -242,7 +225,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             : Icons.arrow_forward_ios,
                         color: Colors.white,
                         size: 16,
-                      ),
+                      ), 
                       onPressed: () {
                         setState(() {
                           _isCollapsed = !_isCollapsed;

@@ -26,7 +26,7 @@ class teacherclass extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-        appBar: AppBar(title:  const Text('Teacher Classes')),
+        
         body: ClassButtonGrid(teacherClasses),
       ),
     );

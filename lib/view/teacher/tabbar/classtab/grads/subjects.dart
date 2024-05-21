@@ -17,7 +17,7 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'المواد'),
-      endDrawer: const CustomDrawer(),
+      drawer: const CustomDrawer(),
       body: GridView.count(
         crossAxisCount: 2, // Display two items in each row
         mainAxisSpacing: 20.0, // Vertical spacing between rows
