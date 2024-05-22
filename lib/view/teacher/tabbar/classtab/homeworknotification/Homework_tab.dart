@@ -113,7 +113,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 var notificationTitle = _filteredNames[index];
                 var notification = notifications.firstWhere((notification) =>
                     notification['title'] == notificationTitle);
-    
+
                 return Column(
                   children: [
                     SizedBox(
@@ -153,14 +153,14 @@ class _NotificationPageState extends State<NotificationPage> {
                                   ),
                                 ],
                               ), // Three dots on the left side
-    
+
                               // Timestamp on the top left corner
                             ),
                             // Title on the top  corner
                             const SizedBox(
                               height: 10,
                             ),
-    
+
                             Column(
                               children: [
                                 Center(
@@ -187,7 +187,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 ),
                                 Text(
                                   notification['content'],
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontWeight: FontWeight.bold,fontSize:15),
                                   textAlign: TextAlign.right,
                                 ),
                                 SizedBox(
@@ -201,7 +201,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                       Text(
                                         ': موعد التسليم ',
                                         style: TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold),
                                       ),
                                       SizedBox(
@@ -214,7 +214,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                             Text(
                                               DateFormat('dd/MM/yyyy').format(
                                                   notification['deadline']),
-                                              style: TextStyle(fontSize: 12),
+                                              style: TextStyle(fontSize: 15),
                                             ),
                                             SizedBox(
                                               width: 10,
@@ -230,19 +230,72 @@ class _NotificationPageState extends State<NotificationPage> {
                                               DateFormat('HH:mm            ')
                                                   .format(
                                                       notification['deadline']),
-                                              style: TextStyle(fontSize: 12),
+                                              style: TextStyle(fontSize: 15),
                                             ),
                                             SizedBox(
                                               width: 10,
                                             ),
                                             Icon(Icons.lock_clock),
                                           ]),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                    image: DecorationImage(
+                                                      image: AssetImage(
+                                                          "img/biology.jpg"),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.8,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.8,
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            image: DecorationImage(
+                                              image:
+                                                  AssetImage("img/biology.jpg"),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.2,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.4, // جعلها أعرض
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
-    
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 20),

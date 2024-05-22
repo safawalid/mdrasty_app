@@ -189,6 +189,50 @@ class _diaryState extends State<diary> {
                                 SizedBox(
                                   height: 40,
                                 ),
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    "img/biology.jpg"),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.8,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.8,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: AssetImage("img/biology.jpg"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.2,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.4, // جعلها أعرض
+                                  ),
+                                ),
+
                               ],
                             ),
 

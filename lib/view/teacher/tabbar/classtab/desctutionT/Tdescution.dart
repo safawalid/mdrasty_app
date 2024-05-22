@@ -1,5 +1,3 @@
-// ignore: file_names
-// ignore_for_file: file_names
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
@@ -7,10 +5,9 @@ import 'package:mdrasty_app/constant/buttoncolor.dart';
 import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/view/student/comment.dart';
 import 'package:mdrasty_app/view/student/viewassigment.dart';
-import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
-
 import 'package:page_transition/page_transition.dart';
 
 class descutionT extends StatefulWidget {
@@ -124,12 +121,11 @@ class _descutionTState extends State<descutionT> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        elevation: 4, // Remove card elevation
-                        color: Colors.white, // Transparent card background
+                        elevation: 4,
+                        color: Colors.white,
                         child: Column(
                           children: [
                             ListTile(
-                              // Top left corner
                               leading: PopupMenuButton<String>(
                                 onSelected: (value) {
                                   if (value == 'edit') {
@@ -151,15 +147,11 @@ class _descutionTState extends State<descutionT> {
                                     child: Text('حذف'),
                                   ),
                                 ],
-                              ), // Three dots on the left side
-
-                              // Timestamp on the top left corner
+                              ),
                             ),
-                            // Title on the top  corner
                             const SizedBox(
                               height: 10,
                             ),
-
                             Column(
                               children: [
                                 Center(
@@ -169,7 +161,7 @@ class _descutionTState extends State<descutionT> {
                                       fontWeight: FontWeight.bold,
                                       fontSize:
                                           MediaQuery.of(context).size.width *
-                                              0.05, // Adjust font size
+                                              0.05,
                                     ),
                                   ),
                                 ),
@@ -192,30 +184,54 @@ class _descutionTState extends State<descutionT> {
                                 SizedBox(
                                   height: 40,
                                 ),
+                                GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Dialog(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    "img/biology.jpg"),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.8,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.8,
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      image: DecorationImage(
+                                        image: AssetImage("img/biology.jpg"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    height: MediaQuery.of(context).size.height *
+                                        0.2,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.4, // جعلها أعرض
+                                  ),
+                                ),
                               ],
                             ),
-
                             const SizedBox(
                               height: 10,
                             ),
-
-                            // Padding(
-                            //   padding: const EdgeInsets.symmetric(
-                            //       vertical: 15, horizontal: 20),
-                            //   child: CustomGradientButton(
-                            //     buttonText: 'عرض الردود',
-                            //     onPressed: () {
-                            //       Navigator.of(context).push(PageTransition(
-                            //         type: PageTransitionType.leftToRight,
-                            //         duration: Duration(milliseconds: 600),
-                            //         reverseDuration:
-                            //             Duration(microseconds: 600),
-                            //         child: viewassigment(),
-                            //       ));
-                            //     },
-                            //     hasHomework: true,
-                            //   ),
-                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -391,7 +407,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter a title';
                           }
-                          return null; // Input is valid
+                          return null;
                         },
                       ),
                     ),
@@ -426,7 +442,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                             if (value == null || value.isEmpty) {
                               return 'Please enter content';
                             }
-                            return null; // Input is valid
+                            return null;
                           },
                         )),
                     ListTile(
@@ -445,8 +461,6 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          // hasHomework:
-                          //     false, // Set hasHomework to false for the Cancel button
                         ),
                         CustomGradientButton(
                           buttonText:
@@ -456,8 +470,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
                               _submit();
                             }
                           },
-                          hasHomework:
-                              true, // Assuming the Edit/Submit button has homework
+                          hasHomework: true,
                         ),
                       ],
                     )
@@ -467,6 +480,36 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class CustomGradientButton extends StatelessWidget {
+  final String buttonText;
+  final VoidCallback onPressed;
+  final bool hasHomework;
+
+  CustomGradientButton({
+    required this.buttonText,
+    required this.onPressed,
+    this.hasHomework = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        primary: hasHomework ? Colors.green : Colors.red,
+      ),
+      onPressed: onPressed,
+      child: Text(
+        buttonText,
+        style: TextStyle(color: Colors.white),
       ),
     );
   }

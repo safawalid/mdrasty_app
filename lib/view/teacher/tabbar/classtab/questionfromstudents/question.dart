@@ -43,7 +43,8 @@ class _ViewQuestionState extends State<ViewQuestion> {
             studentName: item['title'],
             studentAvatarUrl: 'https://example.com/avatar.png',
             date: '2024-04-01',
-            body: item['body'], // Assuming 'body' is the key for notification body
+            body: item[
+                'body'], // Assuming 'body' is the key for notification body
           );
         }).toList();
         filteredNotifications = List.from(originalNotifications);
@@ -258,13 +259,70 @@ class _ViewQuestionState extends State<ViewQuestion> {
                                               ),
                                             ),
                                           ),
+                                          SizedBox(
+                                            height: 20,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return Dialog(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(16),
+                                                        image: DecorationImage(
+                                                          image: AssetImage(
+                                                              "img/biology.jpg"),
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      ),
+                                                      height:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .height *
+                                                              0.8,
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.8,
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      "img/biology.jpg"),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.2,
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.4, // جعلها أعرض
+                                            ),
+                                          ),
                                           Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 15, horizontal: 20),
                                             child: CustomGradientButton(
                                               buttonText: 'اضافة رد',
                                               onPressed: () {
-                                                _showAddReplyDialog(context, notification);
+                                                _showAddReplyDialog(
+                                                    context, notification);
                                               },
                                               hasHomework: true,
                                             ),
