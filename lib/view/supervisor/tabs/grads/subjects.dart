@@ -17,7 +17,7 @@ class Dashboard extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: CustomAppBar(title: 'المواد'),
-        drawer: const CustomDrawer(),
+        endDrawer: const CustomDrawer(),
         body: GridView.count(
           crossAxisCount: 2, // Display two items in each row
           mainAxisSpacing: 20.0, // Vertical spacing between rows
@@ -82,7 +82,7 @@ class SubjectContainer extends StatelessWidget {
           childCurrent: this,
           duration: Duration(milliseconds: 600),
           reverseDuration: Duration(microseconds: 600),
-          child: StudentsMarks_SVA(),
+          child: StudentMarks_SV(),
         ));
       },
       child: Container(

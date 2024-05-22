@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/constant/appbarchild.dart';
 
-
 import 'package:mdrasty_app/constant/fontstyle.dart';
 import 'package:mdrasty_app/style/list.dart';
 import 'package:mdrasty_app/view/student/components/drawer/custom_drawer.dart';
@@ -13,14 +12,15 @@ class viewnotifisuper extends StatefulWidget {
 
 class _viewnotifisuperState extends State<viewnotifisuper> {
   String _searchText = '';
-    TextEditingController _searchController = TextEditingController();
+  TextEditingController _searchController = TextEditingController();
 
   void _deleteNotification(int index) {
     setState(() {
       noti.removeAt(index);
     });
   }
-    @override
+
+  @override
   void dispose() {
     _searchController.dispose(); // التخلص من متحكم البحث عند التخلص من الصفحة
     super.dispose();
@@ -29,15 +29,18 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
   @override
   Widget build(BuildContext context) {
     // Filtered notifications based on search text
-    final filteredNotifications = noti.where((notification) =>
-        _searchText.isEmpty || notification.titile.contains(_searchText)).toList();
+    final filteredNotifications = noti
+        .where((notification) =>
+            _searchText.isEmpty || notification.titile.contains(_searchText))
+        .toList();
 
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: appbarchild(title: "مدرستي",),
+        appBar: appbarchild(
+          title: "مدرستي",
+        ),
         drawer: CustomDrawer(),
-            
         body: GestureDetector(
           onTap: () {
             // Hide keyboard when tapping anywhere on the screen
@@ -63,7 +66,6 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
                             },
                             controller: _searchController,
                             decoration: InputDecoration(
-                            
                               hintText: 'ابحث...',
                               hintStyle: TextStyle(
                                 color: Colors.black,
@@ -88,7 +90,8 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
                 ),
               ),
               Expanded(
-                child: filteredNotifications.isEmpty // Check if there are no filtered notifications
+                child: filteredNotifications
+                        .isEmpty // Check if there are no filtered notifications
                     ? Center(
                         child: Text(
                           'لا توجد نتائج',
@@ -112,11 +115,13 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
                                   ),
                                   elevation: 9,
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       ListTile(
                                         leading: const CircleAvatar(
-                                          backgroundImage: AssetImage("img/biology.jpg"),
+                                          backgroundImage:
+                                              AssetImage("img/biology.jpg"),
                                         ),
                                         title: Align(
                                           alignment: Alignment.topRight,
@@ -157,7 +162,8 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
                                       Padding(
                                         padding: const EdgeInsets.all(20),
                                         child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               notifi.titile,
@@ -171,7 +177,9 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
                                             ),
                                             SizedBox(height: 15),
                                             Container(
-                                              width: MediaQuery.of(context).size.width,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               decoration: BoxDecoration(
                                                 gradient: LinearGradient(
                                                   colors: [
@@ -181,22 +189,39 @@ class _viewnotifisuperState extends State<viewnotifisuper> {
                                                   ],
                                                 ),
                                                 shape: BoxShape.rectangle,
-                                                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10)),
                                               ),
                                               child: Card(
                                                 color: Colors.white,
                                                 elevation: 4,
                                                 shape: RoundedRectangleBorder(
-                                                  borderRadius: BorderRadius.circular(12),
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
                                                 ),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(16.0),
+                                                  padding: const EdgeInsets.all(
+                                                      16.0),
                                                   child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
+                                                      Image.asset(
+                                                        "img/biology.jpg",
+                                                        fit: BoxFit.cover,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            .20,
+                                                        width: double.infinity,
+                                                      ),
                                                       Text(
                                                         notifi.content,
-                                                        style: TextStyle(fontSize: 16),
+                                                        style: TextStyle(
+                                                            fontSize: 16),
                                                       ),
                                                     ],
                                                   ),

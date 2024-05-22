@@ -6,6 +6,7 @@ import 'package:mdrasty_app/view/supervisor/component/drawer/bottom_user_info.da
 import 'package:mdrasty_app/view/supervisor/tabs/attendentSV.dart';
 import 'package:mdrasty_app/view/supervisor/tabs/descution.dart';
 import 'package:mdrasty_app/view/supervisor/tabs/grads/subjects.dart';
+import 'package:mdrasty_app/view/supervisor/tabs/qusetionclass.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -142,7 +143,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: Dashboard(),
+                        child: viewquestionclass(),
                       ));
                     },
                     isTabSelected: _selectedTabIndex == 2,

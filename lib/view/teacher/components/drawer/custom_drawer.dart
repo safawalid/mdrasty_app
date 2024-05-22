@@ -1,17 +1,15 @@
-
 import 'package:flutter/material.dart';
 import 'package:mdrasty_app/constant/drawer/custom_list_tile.dart';
 import 'package:mdrasty_app/utility/shared.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/bottom_user_info.dart';
 import 'package:mdrasty_app/constant/drawer/header.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/desctutionT/Tdescution.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/diaryclass/diaryclass.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/grads.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/Homework_tab.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/questionfromstudents/question.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -109,7 +107,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: NotificationPage(),
+                        child: descutionT(),
                       ));
                     },
                     isTabSelected: _selectedTabIndex ==
@@ -136,7 +134,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
-                     icon: Icons.book_sharp,
+                    icon: Icons.book_sharp,
                     title: 'الكتاب',
                     infoCount: 0,
                     onPressed: () async {
@@ -154,7 +152,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
-                   icon: Icons.note_alt_rounded,
+                    icon: Icons.note_alt_rounded,
                     title: ' الواجبات',
                     infoCount: 8,
                     onPressed: () async {
@@ -200,14 +198,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         type: PageTransitionType.leftToRight,
                         duration: Duration(milliseconds: 600),
                         reverseDuration: Duration(microseconds: 600),
-                        child: NotificationPage(),
+                        child: ViewQuestion(),
                       ));
                     },
                     isTabSelected: _selectedTabIndex == 5,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
-                  
-                  
                   const Divider(
                     color: Colors.grey,
                   ),
@@ -225,7 +221,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             : Icons.arrow_forward_ios,
                         color: Colors.white,
                         size: 16,
-                      ), 
+                      ),
                       onPressed: () {
                         setState(() {
                           _isCollapsed = !_isCollapsed;

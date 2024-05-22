@@ -85,67 +85,70 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'جدول الأسبوع',
-       
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: _previousDay,
-                  color: Colors.blueAccent, // لون الأيقونة
-                ),
-                Text(
-                  daysOfWeek[_currentIndex],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: Icon(Icons.arrow_forward),
-                  onPressed: _nextDay,
-                  color: Colors.blueAccent, // لون الأيقونة
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: List.generate(
-                    scheduleData[daysOfWeek[_currentIndex]]!.length,
-                    (index) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 5),
-                      child: Card(
-                        color: (index + 1) % 2 == 0
-                            ? Colors.indigo
-                            : Colors
-                                .lightBlue.shade50, // تحديد لون الكارد بناءً على رقم الحصة
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _buildScheduleButton('${index + 1}'), // رقم الحصة
-                              SizedBox(width: 10),
-                              _buildScheduleButton(scheduleData[
-                                      daysOfWeek[_currentIndex]]![index]
-                                  [1]), // اسم الصف
-                              SizedBox(width: 10),
-                              _buildScheduleButton(scheduleData[
-                                      daysOfWeek[_currentIndex]]![index]
-                                  [0]), // الساعة
-                            ],
+    return Directionality(
+       textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: CustomAppBar(
+          title: 'جدول الأسبوع',
+         
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: _previousDay,
+                    color: Colors.blueAccent, // لون الأيقونة
+                  ),
+                  Text(
+                    daysOfWeek[_currentIndex],
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_forward),
+                    onPressed: _nextDay,
+                    color: Colors.blueAccent, // لون الأيقونة
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: List.generate(
+                      scheduleData[daysOfWeek[_currentIndex]]!.length,
+                      (index) => Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 5),
+                        child: Card(
+                          color: (index + 1) % 2 == 0
+                              ? Colors.indigo
+                              : Colors
+                                  .lightBlue.shade50, // تحديد لون الكارد بناءً على رقم الحصة
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _buildScheduleButton('${index + 1}'), // رقم الحصة
+                                SizedBox(width: 10),
+                                _buildScheduleButton(scheduleData[
+                                        daysOfWeek[_currentIndex]]![index]
+                                    [1]), // اسم الصف
+                                SizedBox(width: 10),
+                                _buildScheduleButton(scheduleData[
+                                        daysOfWeek[_currentIndex]]![index]
+                                    [0]), // الساعة
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -153,8 +156,8 @@ class _WeeklyScheduleState extends State<WeeklySchedule> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,20 +1,24 @@
+// ignore: file_names
+// ignore_for_file: file_names
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
 import 'package:mdrasty_app/constant/searchbar.dart';
-import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
-import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
+import 'package:mdrasty_app/view/student/comment.dart';
+import 'package:mdrasty_app/view/student/viewassigment.dart';
+import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
+
 import 'package:page_transition/page_transition.dart';
 
-class diary extends StatefulWidget {
+class descutionT extends StatefulWidget {
   @override
-  _diaryState createState() => _diaryState();
+  _descutionTState createState() => _descutionTState();
 }
 
-class _diaryState extends State<diary> {
+class _descutionTState extends State<descutionT> {
   List<Map<String, dynamic>> notifications = [];
   String _searchText = '';
   final TextEditingController _searchController = TextEditingController();
@@ -86,8 +90,7 @@ class _diaryState extends State<diary> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: CustomAppBar(title: 'شروحات'),
-        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBar(title: 'اشعارات'),
         endDrawer: const CustomDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -141,11 +144,11 @@ class _diaryState extends State<diary> {
                                 itemBuilder: (context) => [
                                   PopupMenuItem<String>(
                                     value: 'edit',
-                                    child: Text('Edit'),
+                                    child: Text('تعديل'),
                                   ),
                                   PopupMenuItem<String>(
                                     value: 'delete',
-                                    child: Text('Delete'),
+                                    child: Text('حذف'),
                                   ),
                                 ],
                               ), // Three dots on the left side
@@ -192,23 +195,27 @@ class _diaryState extends State<diary> {
                               ],
                             ),
 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15, horizontal: 20),
-                              child: CustomGradientButton(
-                                buttonText: ' عرض اسئلة الطلاب',
-                                onPressed: () {
-                                  Navigator.of(context).push(PageTransition(
-                                    type: PageTransitionType.leftToRight,
-                                    duration: Duration(milliseconds: 600),
-                                    reverseDuration:
-                                        Duration(microseconds: 600),
-                                    child: ViewHomeworkTab(),
-                                  ));
-                                },
-                                hasHomework: true,
-                              ),
+                            const SizedBox(
+                              height: 10,
                             ),
+
+                            // Padding(
+                            //   padding: const EdgeInsets.symmetric(
+                            //       vertical: 15, horizontal: 20),
+                            //   child: CustomGradientButton(
+                            //     buttonText: 'عرض الردود',
+                            //     onPressed: () {
+                            //       Navigator.of(context).push(PageTransition(
+                            //         type: PageTransitionType.leftToRight,
+                            //         duration: Duration(milliseconds: 600),
+                            //         reverseDuration:
+                            //             Duration(microseconds: 600),
+                            //         child: viewassigment(),
+                            //       ));
+                            //     },
+                            //     hasHomework: true,
+                            //   ),
+                            // ),
                             const SizedBox(
                               height: 10,
                             ),
@@ -224,7 +231,7 @@ class _diaryState extends State<diary> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddNotificationDialog(),
-          tooltip: 'اضف اشعار ',
+          tooltip: 'اضف نقاش',
           child: Icon(Icons.add),
           backgroundColor: Colors.blue.shade900,
         ),
@@ -335,7 +342,7 @@ class _AddNotificationDialogState extends State<AddNotificationDialog> {
           SizedBox(
             width: double.infinity,
             child: Text(
-              widget.notification == null ? 'شرح جديد' : 'تعديل الشرح',
+              widget.notification == null ? 'اشعار جديد' : 'تعديل الاشعار',
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 28,

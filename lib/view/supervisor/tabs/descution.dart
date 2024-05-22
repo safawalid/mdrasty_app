@@ -12,7 +12,6 @@ import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/vi
 
 import 'package:page_transition/page_transition.dart';
 
-
 class descution extends StatefulWidget {
   @override
   _descutionState createState() => _descutionState();
@@ -91,7 +90,7 @@ class _descutionState extends State<descution> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: CustomAppBar(title: 'مناقشه'),
-        drawer: const CustomDrawer(),
+        endDrawer: const CustomDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -191,6 +190,13 @@ class _descutionState extends State<descution> {
                                 ),
                                 SizedBox(
                                   height: 40,
+                                ),
+                                Image.asset(
+                                  "img/biology.jpg",
+                                  fit: BoxFit.cover,
+                                  height:
+                                      MediaQuery.of(context).size.height * .20,
+                                  width: double.infinity,
                                 ),
                               ],
                             ),

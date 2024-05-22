@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Map<String, dynamic> loginMap(String username, String password) {
-  String usern = 'gala';
+  String usern = 'g';
   String pass = '11111111';
   if (username == usern && password == pass) {
     return { 

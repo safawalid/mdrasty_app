@@ -31,7 +31,7 @@ class SearchBar extends StatelessWidget {
                       style: TextStyle(color: Colors.black),
                       onChanged: onChanged,
                       decoration: InputDecoration(
-                        hintText: 'ابحث...',
+                        // hintText: 'ابحث...',
                         hintStyle: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

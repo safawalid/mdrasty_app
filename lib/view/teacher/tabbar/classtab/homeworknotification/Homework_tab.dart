@@ -2,6 +2,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:mdrasty_app/constant/appbar.dart';
@@ -9,7 +10,6 @@ import 'package:mdrasty_app/constant/buttoncolor.dart';
 import 'package:mdrasty_app/constant/drawer/testsearch.dart';
 import 'package:mdrasty_app/constant/searchbar.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
-import 'package:mdrasty_app/view/teacher/tabbar/classtab/homeworknotification/viewhw.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/test.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -92,7 +92,7 @@ class _NotificationPageState extends State<NotificationPage> {
       child: Scaffold(
         appBar: CustomAppBar(title: 'الواجبات'),
         resizeToAvoidBottomInset: false,
-        drawer: const CustomDrawer(),
+        endDrawer: const CustomDrawer(),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -113,7 +113,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 var notificationTitle = _filteredNames[index];
                 var notification = notifications.firstWhere((notification) =>
                     notification['title'] == notificationTitle);
-
+    
                 return Column(
                   children: [
                     SizedBox(
@@ -153,14 +153,14 @@ class _NotificationPageState extends State<NotificationPage> {
                                   ),
                                 ],
                               ), // Three dots on the left side
-
+    
                               // Timestamp on the top left corner
                             ),
                             // Title on the top  corner
                             const SizedBox(
                               height: 10,
                             ),
-
+    
                             Column(
                               children: [
                                 Center(
@@ -242,7 +242,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 ),
                               ],
                             ),
-
+    
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 15, horizontal: 20),

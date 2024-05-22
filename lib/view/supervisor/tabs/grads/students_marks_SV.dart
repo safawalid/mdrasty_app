@@ -1,19 +1,19 @@
+// import 'package:collasable_drawer/wedgits/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:mdrasty_app/constant/appbar.dart';
-import 'package:mdrasty_app/constant/searchbar.dart';
+import 'package:mdrasty_app/constant/buttoncolor.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
+import 'package:page_transition/page_transition.dart';
 
-import 'package:mdrasty_app/constant/fontstyle.dart';
-import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
-
-class StudentsMarks_SVA extends StatefulWidget {
+class StudentMarks_SV extends StatefulWidget {
   @override
-  _StudentsMarks_SVAState createState() => _StudentsMarks_SVAState();
+  _StudentMarks_SVState createState() => _StudentMarks_SVState();
 }
 
-class _StudentsMarks_SVAState extends State<StudentsMarks_SVA> {
+class _StudentMarks_SVState extends State<StudentMarks_SV> {
   late Future<List<Student>> futureStudents;
   TextEditingController searchController = TextEditingController();
   late List<Student> originalStudents;
@@ -44,22 +44,6 @@ class _StudentsMarks_SVAState extends State<StudentsMarks_SVA> {
     }
   }
 
-  void _searchStudents(String value) {
-    setState(() {
-      if (value.isEmpty) {
-        filteredStudents = List.from(originalStudents);
-        showNoResults = false;
-      } else {
-        filteredStudents = originalStudents
-            .where((student) =>
-                student.firstName.toLowerCase().contains(value.toLowerCase()) ||
-                student.lastName.toLowerCase().contains(value.toLowerCase()))
-            .toList();
-        showNoResults = filteredStudents.isEmpty;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -72,11 +56,46 @@ class _StudentsMarks_SVAState extends State<StudentsMarks_SVA> {
         drawer: CustomDrawer(),
         body: Column(
           children: [
-            SearchBar(
-              controller: searchController,
-              onChanged: _searchStudents,
-              noResults: showNoResults,
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: TextField(
+                controller: searchController,
+                onChanged: (value) {
+                  setState(() {
+                    if (value.isEmpty) {
+                      filteredStudents = List.from(originalStudents);
+                      showNoResults = false;
+                    } else {
+                      filteredStudents = originalStudents
+                          .where((student) =>
+                              student.firstName
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()) ||
+                              student.lastName
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                          .toList();
+                      showNoResults = filteredStudents.isEmpty;
+                    }
+                  });
+                },
+                decoration: InputDecoration(
+                  labelText: 'ابحث عن اسم الطالب',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  filled: true,
+                  fillColor: Colors.grey[
+                      200], // Change the color to your desired background color
+                  focusColor: Colors.blue,
+                ),
+              ),
             ),
+            if (showNoResults)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('لاتوجد نتائج'),
+              ),
             Expanded(
               child: FutureBuilder<List<Student>>(
                 future: futureStudents,
@@ -102,6 +121,7 @@ class _StudentsMarks_SVAState extends State<StudentsMarks_SVA> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                // Displaying the student's name
                                 Center(
                                   child: Text(
                                     '${student.firstName} ${student.lastName}',
@@ -112,68 +132,88 @@ class _StudentsMarks_SVAState extends State<StudentsMarks_SVA> {
                                     textAlign: TextAlign.center,
                                   ),
                                 ),
-                                SizedBox(height: 16),
+                                SizedBox(height: 16), // Adding some spacing
+
+                                // Row for Month 1 exam mark
                                 Row(
                                   children: [
                                     Text(
-                                      ': ختبار الشهر الاول ',
+                                      'الشهر الاول:',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    SizedBox(width: 10), // Adding some spacing
                                     Expanded(
                                       child: TextField(
-                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
-                                          hintText: 'ادخل الدرجه',
+                                          hintText: 'ادخل درجة الشهر الاول',
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 8),
+                                SizedBox(height: 8), // Adding some spacing
+
+                                // Row for Month 2 exam mark
                                 Row(
                                   children: [
                                     Text(
-                                      ': ختبار الشهر الثاني ',
+                                      'الشهر الثاني:',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    SizedBox(width: 10), // Adding some spacing
                                     Expanded(
                                       child: TextField(
-                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
-                                          hintText: 'ادخل الدرجه',
+                                          hintText: 'ادخل درجة الشهر الثاني',
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 8),
+                                SizedBox(height: 8), // Adding some spacing
+
+                                // Row for Final Exam mark
                                 Row(
                                   children: [
                                     Text(
-                                      ': الامتحان الفصلي',
+                                      'الاختبار الفصلي:',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
+                                    SizedBox(width: 10), // Adding some spacing
                                     Expanded(
                                       child: TextField(
-                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
-                                          hintText: 'ادخل الدرجه',
+                                          hintText: 'ادخل درجة الاختبار الفصلي',
                                         ),
                                       ),
                                     ),
                                   ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 20),
+                                  child: CustomGradientButton(
+                                    buttonText: 'حفظ',
+                                    // onPressed: () {
+                                    //   Navigator.of(context).push(PageTransition(
+                                    //     type: PageTransitionType.leftToRight,
+                                    //     duration: Duration(milliseconds: 600),
+                                    //     reverseDuration:
+                                    //         Duration(microseconds: 600),
+                                    //     child: ViewHomeworkTabtest(),
+                                    //   ));
+                                    // },
+                                    hasHomework: true,
+                                  ),
                                 ),
                               ],
                             ),
@@ -183,7 +223,7 @@ class _StudentsMarks_SVAState extends State<StudentsMarks_SVA> {
                     );
                   } else {
                     return Center(
-                      child: Text('لا توجد بيانات'),
+                      child: Text('لاتوجد بيانات'),
                     );
                   }
                 },
