@@ -1,0 +1,152 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mdrasty_app/constant/appbar.dart';
+import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
+
+class ReportPage extends StatefulWidget {
+  @override
+  _ReportPageState createState() => _ReportPageState();
+}
+
+class _ReportPageState extends State<ReportPage> {
+  List<Report> reports = [];
+  DateTime? _selectedDate;
+  List<Report> _filteredReports = [];
+
+  void _addReport(String reportText) {
+    setState(() {
+      reports.add(Report(reportText, DateTime.now()));
+      _filterReports();
+    });
+  }
+
+  void _showAddReportDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String newReportText = '';
+        return AlertDialog(
+          title: Text('اضف تقرير يومي'),
+          content: TextField(
+            onChanged: (text) {
+              newReportText = text;
+            },
+            maxLines: 5,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: 'اكتب تقريرك هنا',
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('الغاء'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('ارسال'),
+              onPressed: () {
+                if (newReportText.isNotEmpty) {
+                  _addReport(newReportText);
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _pickDate() async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+        _filterReports();
+      });
+    }
+  }
+
+  void _filterReports() {
+    if (_selectedDate == null) {
+      _filteredReports = reports;
+    } else {
+      _filteredReports = reports
+          .where((report) =>
+              report.date.year == _selectedDate!.year &&
+              report.date.month == _selectedDate!.month &&
+              report.date.day == _selectedDate!.day)
+          .toList();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _filterReports();
+
+    return Scaffold(
+      appBar: CustomAppBar(title: "تقرير اليومي"),
+      endDrawer: CustomDrawer(),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                IconButton(
+                  icon: Icon(Icons.filter_list),
+                  onPressed: _pickDate,
+                ),
+                Text(
+                  _selectedDate != null
+                      ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
+                      : 'No date selected',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: _filteredReports.isEmpty
+                ? Center(child: Text('للتوجد تقرير'))
+                : ListView.builder(
+                    itemCount: _filteredReports.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          title: Text(_filteredReports[index].text),
+                          subtitle: Text(DateFormat('yyyy-MM-dd – kk:mm')
+                              .format(_filteredReports[index].date)),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddReportDialog,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class Report {
+  String text;
+  DateTime date;
+
+  Report(this.text, this.date);
+}

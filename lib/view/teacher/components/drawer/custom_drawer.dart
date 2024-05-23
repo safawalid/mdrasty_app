@@ -3,6 +3,7 @@ import 'package:mdrasty_app/constant/drawer/custom_list_tile.dart';
 import 'package:mdrasty_app/utility/shared.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/bottom_user_info.dart';
 import 'package:mdrasty_app/constant/drawer/header.dart';
+import 'package:mdrasty_app/view/teacher/tabbar/classtab/report.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/desctutionT/Tdescution.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/diaryclass/diaryclass.dart';
 import 'package:mdrasty_app/view/teacher/tabbar/classtab/grads/grads.dart';
@@ -202,6 +203,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       ));
                     },
                     isTabSelected: _selectedTabIndex == 5,
+                    activeColor: activeColor, // تحديد اللون النشط هنا
+                  ),
+                  CustomListTile(
+                    isCollapsed: _isCollapsed,
+                    icon: Icons.question_answer,
+                    title: 'تقرير يومي',
+                    infoCount: 2,
+                    onPressed: () async {
+                      _onTabChanged(6);
+                      await DrawerHelper.saveDrawerState(5, activeColor);
+                      Navigator.of(context).push(PageTransition(
+                        type: PageTransitionType.leftToRight,
+                        duration: Duration(milliseconds: 600),
+                        reverseDuration: Duration(microseconds: 600),
+                        child: ReportPage(),
+                      ));
+                    },
+                    isTabSelected: _selectedTabIndex == 6,
                     activeColor: activeColor, // تحديد اللون النشط هنا
                   ),
                   const Divider(

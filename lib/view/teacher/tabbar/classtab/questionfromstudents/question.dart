@@ -12,12 +12,14 @@ class Notification {
   final String studentAvatarUrl;
   final String date;
   final String body;
+  final List<String> replies; // Added for storing replies
 
   Notification({
     required this.studentName,
     required this.studentAvatarUrl,
     required this.date,
     required this.body,
+    this.replies = const [], // Initialize with empty list
   });
 }
 
@@ -43,8 +45,7 @@ class _ViewQuestionState extends State<ViewQuestion> {
             studentName: item['title'],
             studentAvatarUrl: 'https://example.com/avatar.png',
             date: '2024-04-01',
-            body: item[
-                'body'], // Assuming 'body' is the key for notification body
+            body: item['body'], // Assuming 'body' is the key for notification body
           );
         }).toList();
         filteredNotifications = List.from(originalNotifications);
@@ -86,14 +87,19 @@ class _ViewQuestionState extends State<ViewQuestion> {
                 if (reply.isNotEmpty) {
                   await _sendReply(notification, reply);
                   setState(() {
-                    // Optionally update the local state to show the reply instantly
-                    // This is just an example, you may want to handle replies differently
-                    filteredNotifications.add(Notification(
-                      studentName: notification.studentName,
-                      studentAvatarUrl: notification.studentAvatarUrl,
-                      date: DateTime.now().toIso8601String(),
-                      body: reply,
-                    ));
+                    // Update local state to show the reply instantly
+                    filteredNotifications = filteredNotifications.map((n) {
+                      if (n.studentName == notification.studentName) {
+                        return Notification(
+                          studentName: n.studentName,
+                          studentAvatarUrl: n.studentAvatarUrl,
+                          date: n.date,
+                          body: n.body,
+                          replies: List.from(n.replies)..add(reply),
+                        );
+                      }
+                      return n;
+                    }).toList();
                   });
                   Navigator.of(context).pop();
                 }
@@ -259,60 +265,39 @@ class _ViewQuestionState extends State<ViewQuestion> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return Dialog(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(16),
-                                                        image: DecorationImage(
-                                                          image: AssetImage(
-                                                              "img/biology.jpg"),
-                                                          fit: BoxFit.cover,
+                                          Center(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (BuildContext context) {
+                                                    return Dialog(
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          borderRadius: BorderRadius.circular(16),
+                                                          image: DecorationImage(
+                                                            image: AssetImage("img/biology.jpg"),
+                                                            fit: BoxFit.cover,
+                                                          ),
                                                         ),
+                                                        height: MediaQuery.of(context).size.height * 0.8,
+                                                        width: MediaQuery.of(context).size.width * 0.8,
                                                       ),
-                                                      height:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .height *
-                                                              0.8,
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.8,
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(16),
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      "img/biology.jpg"),
-                                                  fit: BoxFit.cover,
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(16),
+                                                  image: DecorationImage(
+                                                    image: AssetImage("img/biology.jpg"),
+                                                    fit: BoxFit.cover,
+                                                  ),
                                                 ),
+                                                height: MediaQuery.of(context).size.height * 0.2,
+                                                width: MediaQuery.of(context).size.width * 0.4,
                                               ),
-                                              height: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.2,
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.4, // جعلها أعرض
                                             ),
                                           ),
                                           Padding(
@@ -327,6 +312,29 @@ class _ViewQuestionState extends State<ViewQuestion> {
                                               hasHomework: true,
                                             ),
                                           ),
+                                          if (notification.replies.isNotEmpty) ...[
+                                            Divider(
+                                              color: Colors.grey.shade800,
+                                            ),
+                                            Text(
+                                              'ردود المعلم:',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            for (var reply in notification.replies)
+                                              Padding(
+                                                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                                                child: Text(
+                                                  reply,
+                                                  textAlign: TextAlign.right,
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey.shade600,
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
                                         ],
                                       ),
                                     ),
