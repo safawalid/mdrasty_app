@@ -21,39 +21,50 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   void _showAddReportDialog() {
+    String newReportText = '';
+    bool isButtonEnabled = false;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String newReportText = '';
-        return AlertDialog(
-          title: Text('اضف تقرير يومي'),
-          content: TextField(
-            onChanged: (text) {
-              newReportText = text;
-            },
-            maxLines: 5,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: 'اكتب تقريرك هنا',
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text('الغاء'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('ارسال'),
-              onPressed: () {
-                if (newReportText.isNotEmpty) {
-                  _addReport(newReportText);
-                }
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('اضف تقرير يومي'),
+              content: TextField(
+                onChanged: (text) {
+                  setState(() {
+                    newReportText = text;
+                    isButtonEnabled = newReportText.isNotEmpty;
+                  });
+                },
+                maxLines: 5,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'اكتب تقريرك هنا',
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('الغاء'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                TextButton(
+                  child: Text('ارسال'),
+                  onPressed: isButtonEnabled
+                      ? () {
+                          if (newReportText.isNotEmpty) {
+                            _addReport(newReportText);
+                          }
+                          Navigator.of(context).pop();
+                        }
+                      : null,
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -100,6 +111,7 @@ class _ReportPageState extends State<ReportPage> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
                   icon: Icon(Icons.filter_list),
@@ -108,7 +120,7 @@ class _ReportPageState extends State<ReportPage> {
                 Text(
                   _selectedDate != null
                       ? DateFormat('yyyy-MM-dd').format(_selectedDate!)
-                      : 'No date selected',
+                      : 'لم يتم تحديد التاريخ',
                   style: TextStyle(fontSize: 16),
                 ),
               ],
@@ -116,7 +128,7 @@ class _ReportPageState extends State<ReportPage> {
           ),
           Expanded(
             child: _filteredReports.isEmpty
-                ? Center(child: Text('للتوجد تقرير'))
+                ? Center(child: Text('لا توجد تقارير'))
                 : ListView.builder(
                     itemCount: _filteredReports.length,
                     itemBuilder: (context, index) {
@@ -126,9 +138,15 @@ class _ReportPageState extends State<ReportPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: ListTile(
-                          title: Text(_filteredReports[index].text),
-                          subtitle: Text(DateFormat('yyyy-MM-dd – kk:mm')
-                              .format(_filteredReports[index].date)),
+                          title: Text(
+                            _filteredReports[index].text,
+                            textAlign: TextAlign.right,
+                          ),
+                          subtitle: Text(
+                            DateFormat('yyyy-MM-dd – kk:mm')
+                                .format(_filteredReports[index].date),
+                            textAlign: TextAlign.right,
+                          ),
                         ),
                       );
                     },

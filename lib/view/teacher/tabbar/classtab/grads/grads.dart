@@ -1,4 +1,3 @@
-// import 'package:collasable_drawer/wedgits/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -6,7 +5,6 @@ import 'dart:convert';
 import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
 import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
-import 'package:page_transition/page_transition.dart';
 
 class StudentMarksPage extends StatefulWidget {
   @override
@@ -21,7 +19,7 @@ class _StudentMarksPageState extends State<StudentMarksPage> {
   bool showNoResults = false;
 
   @override
-  void initState() {
+  void initState() { 
     super.initState();
     futureStudents = fetchStudents();
   }
@@ -49,183 +47,187 @@ class _StudentMarksPageState extends State<StudentMarksPage> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(
           title: 'درجات الطلاب',
         ),
         drawer: CustomDrawer(),
-        body: Column(
+        body: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: TextField(
-                controller: searchController,
-                onChanged: (value) {
-                  setState(() {
-                    if (value.isEmpty) {
-                      filteredStudents = List.from(originalStudents);
-                      showNoResults = false;
-                    } else {
-                      filteredStudents = originalStudents
-                          .where((student) =>
-                              student.firstName
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase()) ||
-                              student.lastName
-                                  .toLowerCase()
-                                  .contains(value.toLowerCase()))
-                          .toList();
-                      showNoResults = filteredStudents.isEmpty;
-                    }
-                  });
-                },
-                decoration: InputDecoration(
-                  labelText: 'ابحث عن اسم الطالب',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  filled: true,
-                  fillColor: Colors.grey[
-                      200], // Change the color to your desired background color
-                  focusColor: Colors.blue,
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: TextField(
+                    controller: searchController,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value.isEmpty) {
+                          filteredStudents = List.from(originalStudents);
+                          showNoResults = false;
+                        } else {
+                          filteredStudents = originalStudents
+                              .where((student) =>
+                                  student.firstName
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()) ||
+                                  student.lastName
+                                      .toLowerCase()
+                                      .contains(value.toLowerCase()))
+                              .toList();
+                          showNoResults = filteredStudents.isEmpty;
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'ابحث عن اسم الطالب',
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      filled: true,
+                      fillColor: Colors.grey[
+                          200], // Change the color to your desired background color
+                      focusColor: Colors.blue,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            if (showNoResults)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('لاتوجد نتائج'),
-              ),
-            Expanded(
-              child: FutureBuilder<List<Student>>(
-                future: futureStudents,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  } else if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: filteredStudents.length,
-                      itemBuilder: (context, index) {
-                        final student = filteredStudents[index];
-
-                        return Card(
-                          elevation: 5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Displaying the student's name
-                                Center(
-                                  child: Text(
-                                    '${student.firstName} ${student.lastName}',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                                SizedBox(height: 16), // Adding some spacing
-
-                                // Row for Month 1 exam mark
-                                Row(
-                                  children: [
-                                    Text(
-                                      'الشهر الاول:',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10), // Adding some spacing
-                                    Expanded(
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 'ادخل درجة الشهر الاول',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 8), // Adding some spacing
-
-                                // Row for Month 2 exam mark
-                                Row(
-                                  children: [
-                                    Text(
-                                      'الشهر الثاني:',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10), // Adding some spacing
-                                    Expanded(
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 'ادخل درجة الشهر الثاني',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 8), // Adding some spacing
-
-                                // Row for Final Exam mark
-                                Row(
-                                  children: [
-                                    Text(
-                                      'الاختبار الفصلي:',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10), // Adding some spacing
-                                    Expanded(
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 'ادخل درجة الاختبار الفصلي',
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 15, horizontal: 20),
-                                  child: CustomGradientButton(
-                                    buttonText: 'حفظ',
-                                    // onPressed: () {
-                                    //   Navigator.of(context).push(PageTransition(
-                                    //     type: PageTransitionType.leftToRight,
-                                    //     duration: Duration(milliseconds: 600),
-                                    //     reverseDuration:
-                                    //         Duration(microseconds: 600),
-                                    //     child: ViewHomeworkTabtest(),
-                                    //   ));
-                                    // },
-                                    hasHomework: true,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                if (showNoResults)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('لاتوجد نتائج'),
+                  ),
+                Expanded(
+                  child: FutureBuilder<List<Student>>(
+                    future: futureStudents,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(),
                         );
-                      },
-                    );
-                  } else {
-                    return Center(
-                      child: Text('لاتوجد بيانات'),
-                    );
-                  }
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      } else if (snapshot.hasData) {
+                        return ListView.builder(
+                          itemCount: filteredStudents.length,
+                          itemBuilder: (context, index) {
+                            final student = filteredStudents[index];
+
+                            return Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Displaying the student's name
+                                    Center(
+                                      child: Text(
+                                        '${student.firstName} ${student.lastName}',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    SizedBox(height: 16), // Adding some spacing
+
+                                    // Row for Month 1 exam mark
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'الشهر الاول:',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width: 10), // Adding some spacing
+                                        Expanded(
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  'ادخل درجة الشهر الاول',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8), // Adding some spacing
+
+                                    // Row for Month 2 exam mark
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'الشهر الثاني:',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width: 10), // Adding some spacing
+                                        Expanded(
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  'ادخل درجة الشهر الثاني',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 8), // Adding some spacing
+
+                                    // Row for Final Exam mark
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'الاختبار الفصلي:',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            width: 10), // Adding some spacing
+                                        Expanded(
+                                          child: TextField(
+                                            decoration: InputDecoration(
+                                              hintText:
+                                                  'ادخل درجة الاختبار الفصلي',
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Center(
+                          child: Text('لاتوجد بيانات'),
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 20,
+              left: 20,
+              right: 20,
+              child: CustomGradientButton(
+                buttonText: 'حفظ',
+                hasHomework: true,
+                onPressed: () {
+                  // Add your save logic here
                 },
               ),
             ),

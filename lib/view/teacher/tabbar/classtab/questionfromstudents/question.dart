@@ -4,8 +4,7 @@ import 'package:mdrasty_app/constant/appbar.dart';
 import 'package:mdrasty_app/constant/buttoncolor.dart';
 import 'dart:convert';
 
-import 'package:mdrasty_app/view/teacher/components/drawer/custom_drawer.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:mdrasty_app/view/supervisor/component/drawer/custom_drawer.dart';
 
 class Notification {
   final String studentName;
@@ -28,6 +27,7 @@ class ViewQuestion extends StatefulWidget {
   _ViewQuestionState createState() => _ViewQuestionState();
 }
 
+// داخل _ViewQuestionState
 class _ViewQuestionState extends State<ViewQuestion> {
   late List<Notification> originalNotifications;
   List<Notification> filteredNotifications = [];
@@ -45,7 +45,8 @@ class _ViewQuestionState extends State<ViewQuestion> {
             studentName: item['title'],
             studentAvatarUrl: 'https://example.com/avatar.png',
             date: '2024-04-01',
-            body: item['body'], // Assuming 'body' is the key for notification body
+            body: item['body'],
+            replies: [], // Assuming 'body' is the key for notification body
           );
         }).toList();
         filteredNotifications = List.from(originalNotifications);
@@ -88,18 +89,8 @@ class _ViewQuestionState extends State<ViewQuestion> {
                   await _sendReply(notification, reply);
                   setState(() {
                     // Update local state to show the reply instantly
-                    filteredNotifications = filteredNotifications.map((n) {
-                      if (n.studentName == notification.studentName) {
-                        return Notification(
-                          studentName: n.studentName,
-                          studentAvatarUrl: n.studentAvatarUrl,
-                          date: n.date,
-                          body: n.body,
-                          replies: List.from(n.replies)..add(reply),
-                        );
-                      }
-                      return n;
-                    }).toList();
+                    notification.replies
+                        .add(reply); // Add the reply to the notification
                   });
                   Navigator.of(context).pop();
                 }
@@ -112,21 +103,12 @@ class _ViewQuestionState extends State<ViewQuestion> {
   }
 
   Future<void> _sendReply(Notification notification, String reply) async {
-    // Replace the URL with your actual endpoint
-    final response = await http.post(
-      Uri.parse('https://your.api.endpoint/sendReply'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        'studentName': notification.studentName,
-        'reply': reply,
-      }),
-    );
-
-    if (response.statusCode != 200) {
-      throw Exception('Failed to send reply');
-    }
+    // Simulate sending the reply to a server (optional)
+    // This function is used for local update only, no actual API call
+    setState(() {
+      // Add the reply to the notification
+      notification.replies.add(reply);
+    });
   }
 
   @override
@@ -270,18 +252,32 @@ class _ViewQuestionState extends State<ViewQuestion> {
                                               onTap: () {
                                                 showDialog(
                                                   context: context,
-                                                  builder: (BuildContext context) {
+                                                  builder:
+                                                      (BuildContext context) {
                                                     return Dialog(
                                                       child: Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: BorderRadius.circular(16),
-                                                          image: DecorationImage(
-                                                            image: AssetImage("img/biology.jpg"),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(16),
+                                                          image:
+                                                              DecorationImage(
+                                                            image: AssetImage(
+                                                                "img/biology.jpg"),
                                                             fit: BoxFit.cover,
                                                           ),
                                                         ),
-                                                        height: MediaQuery.of(context).size.height * 0.8,
-                                                        width: MediaQuery.of(context).size.width * 0.8,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.8,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
                                                       ),
                                                     );
                                                   },
@@ -289,14 +285,22 @@ class _ViewQuestionState extends State<ViewQuestion> {
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(16),
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
                                                   image: DecorationImage(
-                                                    image: AssetImage("img/biology.jpg"),
+                                                    image: AssetImage(
+                                                        "img/biology.jpg"),
                                                     fit: BoxFit.cover,
                                                   ),
                                                 ),
-                                                height: MediaQuery.of(context).size.height * 0.2,
-                                                width: MediaQuery.of(context).size.width * 0.4,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.2,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.4,
                                               ),
                                             ),
                                           ),
@@ -312,29 +316,34 @@ class _ViewQuestionState extends State<ViewQuestion> {
                                               hasHomework: true,
                                             ),
                                           ),
-                                          if (notification.replies.isNotEmpty) ...[
-                                            Divider(
-                                              color: Colors.grey.shade800,
-                                            ),
-                                            Text(
-                                              'ردود المعلم:',
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            for (var reply in notification.replies)
-                                              Padding(
-                                                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                                                child: Text(
-                                                  reply,
-                                                  textAlign: TextAlign.right,
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color: Colors.grey.shade600,
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
+// تظهر الردود كتعليقات
+                                          if (notification.replies.isNotEmpty)
+                                            ...notification.replies
+                                                .map((reply) => Padding(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          vertical: 5.0,
+                                                          horizontal: 20),
+                                                      child: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Text(
+                                                              reply,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style: TextStyle(
+                                                                fontSize: 19,
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade600,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Icon(Icons.comment),
+                                                        ],
+                                                      ),
+                                                    )),
                                         ],
                                       ),
                                     ),

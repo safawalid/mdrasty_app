@@ -207,7 +207,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                   CustomListTile(
                     isCollapsed: _isCollapsed,
-                    icon: Icons.question_answer,
+                    icon: Icons.description,
                     title: 'تقرير يومي',
                     infoCount: 2,
                     onPressed: () async {
